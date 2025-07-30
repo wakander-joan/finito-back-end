@@ -1,0 +1,25 @@
+server:
+  servlet:
+    context-path: /finito/api
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/finito
+    username: postgres
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      poolName: SpringBootJPAHikariCP
+      minimumIdle: 20
+      maximumPoolSize: 200
+      connectionTimeout: 30000
+      idleTimeout: 30000
+      maxLifetime: 2000000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: lancamento
+        dialect: org.hibernate.dialect.PostgreSQLDialect
