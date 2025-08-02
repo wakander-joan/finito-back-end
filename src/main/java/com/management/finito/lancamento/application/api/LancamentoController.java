@@ -28,8 +28,9 @@ public class LancamentoController implements LancamentoAPI {
     @Override
     public LancamentoDetalhadoResponse buscaLancamento(UUID idLancamento) {
         log.info("[start] LancamentoController - buscaLancamento");
+        LancamentoDetalhadoResponse lancamento = lancamentoService.buscaLancamento(idLancamento);
         log.info("[finish] LancamentoController - buscaLancamento");
-        return null;
+        return lancamento;
     }
 
     @Override

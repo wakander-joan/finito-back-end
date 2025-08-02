@@ -1,5 +1,6 @@
 package com.management.finito.lancamento.application.service;
 
+import com.management.finito.lancamento.application.api.LancamentoDetalhadoResponse;
 import com.management.finito.lancamento.application.api.LancamentoRequest;
 import com.management.finito.lancamento.application.api.LancamentoResponse;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
@@ -7,6 +8,8 @@ import com.management.finito.lancamento.domain.Lancamento;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -20,5 +23,13 @@ public class LancamentoApplicationService implements LancamentoService {
         Lancamento lancamentoCriado = lancamentoRepository.salva(new Lancamento(lancamentoRequest));
         log.info("[finish] LancamentoApplicationService - cadastraLancamento");
         return new LancamentoResponse(lancamentoCriado);
+    }
+
+    @Override
+    public LancamentoDetalhadoResponse buscaLancamento(UUID idLancamento) {
+        log.info("[start] LancamentoApplicationService - buscaLancamento");
+        Lancamento lancamento = lancamentoRepository.buscaLancamento(idLancamento);
+        log.info("[finish] LancamentoApplicationService - buscaLancamento");
+        return new LancamentoDetalhadoResponse(lancamento);
     }
 }
