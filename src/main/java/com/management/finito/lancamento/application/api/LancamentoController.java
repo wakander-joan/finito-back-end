@@ -34,9 +34,10 @@ public class LancamentoController implements LancamentoAPI {
     }
 
     @Override
-    public List<LancamentoResponse> buscaTodosLancamentoPorMes(MesDoLancamento mes) {
+    public List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(MesDoLancamento mes) {
         log.info("[start] LancamentoController - buscaTodosLancamentoPorMes");
+        List<LancamentoDetalhadoResponse> listaDeLancamentos = lancamentoService.buscaTodosLancamentoPorMes(mes);
         log.info("[finish] LancamentoController - buscaTodosLancamentoPorMes");
-        return List.of();
+        return listaDeLancamentos;
     }
 }

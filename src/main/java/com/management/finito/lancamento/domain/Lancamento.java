@@ -1,15 +1,12 @@
 package com.management.finito.lancamento.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.management.finito.lancamento.application.api.LancamentoRequest;
-import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 import com.management.finito.lancamento.domain.enums.SatatusLancamento;
 import com.management.finito.lancamento.domain.enums.TipoLancamento;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -26,16 +23,16 @@ public class Lancamento {
     private String descricao;
     private Double preco;
     private LocalDate dataVencimento;
-    private SatatusLancamento status;
-    private TipoLancamento tipo;
-    private MesDoLancamento mesDoLancamento;
+    private int status;
+    private int tipo;
+    private int mesDoLancamento;
 
     public Lancamento(LancamentoRequest lancamentoRequest) {
         this.descricao = lancamentoRequest.getDescricao();
         this.preco = lancamentoRequest.getPreco();
         this.dataVencimento = lancamentoRequest.getDataVencimento();
-        this.status = lancamentoRequest.getStatus();
-        this.tipo = lancamentoRequest.getTipo();
-        this.mesDoLancamento = lancamentoRequest.getMesDoLancamento();
+        this.status = lancamentoRequest.getStatus().getId();
+        this.tipo = lancamentoRequest.getTipo().getId();
+        this.mesDoLancamento = lancamentoRequest.getMesDoLancamento().getId();
     }
 }

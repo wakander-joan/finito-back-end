@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @ToString
 @Getter
@@ -26,8 +28,13 @@ public class LancamentoDetalhadoResponse {
         this.descricao = lancamento.getDescricao();
         this.preco = lancamento.getPreco();
         this.dataVencimento = lancamento.getDataVencimento();
-        this.status = lancamento.getStatus();
-        this.tipo = lancamento.getTipo();
-        this.mesDoLancamento = lancamento.getMesDoLancamento();
+        this.status = SatatusLancamento.fromId(lancamento.getStatus());
+        this.tipo = TipoLancamento.fromId(lancamento.getTipo());
+        this.mesDoLancamento = MesDoLancamento.fromId(lancamento.getMesDoLancamento());
     }
+
+    public static List<LancamentoDetalhadoResponse> converte(List<Lancamento> lancamentos) {
+        return lancamentos.stream().map(c -> new LancamentoDetalhadoResponse(c)).collect(Collectors.toList());
+    }
+
 }

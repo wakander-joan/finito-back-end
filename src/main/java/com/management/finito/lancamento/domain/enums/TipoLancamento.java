@@ -1,8 +1,12 @@
 package com.management.finito.lancamento.domain.enums;
 
 import lombok.Getter;
+import lombok.ToString;
+
+import java.util.Arrays;
 
 @Getter
+@ToString
 public enum TipoLancamento {
     RECEITA (1, "RECEITA"),
     DESPESA (1, "DESPESA");
@@ -13,5 +17,12 @@ public enum TipoLancamento {
     TipoLancamento(Integer id, String tipo) {
         this.id = id;
         this.tipo = tipo;
+    }
+
+    public static TipoLancamento fromId(Integer id) {
+        return Arrays.stream(TipoLancamento.values())
+                .filter(t -> t.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Tipo inválido para id: " + id));
     }
 }

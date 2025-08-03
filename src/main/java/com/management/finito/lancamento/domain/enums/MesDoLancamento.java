@@ -1,5 +1,12 @@
 package com.management.finito.lancamento.domain.enums;
 
+import lombok.Getter;
+import lombok.ToString;
+
+import java.util.Arrays;
+
+@Getter
+@ToString
 public enum MesDoLancamento {
     JANEIRO     (1, "JANEIRO"),
     FEVEREIRO   (2, "FEVEREIRO"),
@@ -20,5 +27,12 @@ public enum MesDoLancamento {
     MesDoLancamento(int id, String mes) {
         this.id = id;
         this.mes = mes;
+    }
+
+    public static MesDoLancamento fromId(int id) {
+        return Arrays.stream(MesDoLancamento.values())
+                .filter(m -> m.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Mês inválido para id: " + id));
     }
 }

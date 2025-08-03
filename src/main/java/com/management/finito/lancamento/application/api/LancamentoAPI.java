@@ -22,6 +22,6 @@ public interface LancamentoAPI {
 
     @GetMapping("/buscaTodosLancamentoPorMes/{mes}")
     @ResponseStatus(code = HttpStatus.OK)
-    List<LancamentoResponse> buscaTodosLancamentoPorMes(MesDoLancamento mes);
+    List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(@PathVariable MesDoLancamento mes);
 
 }
