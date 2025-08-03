@@ -12,4 +12,5 @@ public interface LancamentoService {
     LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest);
     LancamentoDetalhadoResponse buscaLancamento(UUID idLancamento);
     List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(MesDoLancamento mes);
+    void deletaLancamento(UUID idLancamento);
 }

@@ -42,4 +42,12 @@ public class LancamentoApplicationService implements LancamentoService {
         log.info("[finish] LancamentoApplicationService - buscaTodosLancamentoPorMes");
         return LancamentoDetalhadoResponse.converte(lancamentos);
     }
+
+    @Override
+    public void deletaLancamento(UUID idLancamento) {
+        log.info("[start] LancamentoApplicationService - deletaLancamento");
+        lancamentoRepository.buscaLancamento(idLancamento);
+        lancamentoRepository.deletaLancamento(idLancamento);
+        log.info("[finish] LancamentoApplicationService - deletaLancamento");
+    }
 }

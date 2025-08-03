@@ -24,4 +24,7 @@ public interface LancamentoAPI {
     @ResponseStatus(code = HttpStatus.OK)
     List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(@PathVariable MesDoLancamento mes);
 
+    @DeleteMapping("/deletaLancamento/{idLancamento}")
+    @ResponseStatus(code = HttpStatus.OK)
+    void deletaLancamento(@PathVariable UUID idLancamento);
 }

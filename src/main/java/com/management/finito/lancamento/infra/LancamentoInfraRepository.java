@@ -42,4 +42,11 @@ public class LancamentoInfraRepository implements LancamentoRepository {
         log.info("[finish] LancamentoInfraRepository - buscaTodosLancamentoPorMes");
         return listaDeLancamentos;
     }
+
+    @Override
+    public void deletaLancamento(UUID idLancamento) {
+        log.info("[start] LancamentoInfraRepository - deletaLancamento");
+        lancamentoJPARepository.deleteById(idLancamento);
+        log.info("[finish] LancamentoInfraRepository - deletaLancamento");
+    }
 }

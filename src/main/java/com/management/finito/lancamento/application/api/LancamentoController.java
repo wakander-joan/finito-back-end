@@ -40,4 +40,11 @@ public class LancamentoController implements LancamentoAPI {
         log.info("[finish] LancamentoController - buscaTodosLancamentoPorMes");
         return listaDeLancamentos;
     }
+
+    @Override
+    public void deletaLancamento(UUID idLancamento) {
+        log.info("[start] LancamentoController - deletaLancamento");
+        lancamentoService.deletaLancamento(idLancamento);
+        log.info("[finish] LancamentoController - deletaLancamento");
+    }
 }

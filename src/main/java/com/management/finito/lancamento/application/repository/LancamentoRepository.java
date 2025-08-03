@@ -10,4 +10,5 @@ public interface LancamentoRepository {
     Lancamento salva(Lancamento lancamento);
     Lancamento buscaLancamento(UUID idLancamento);
     List<Lancamento> buscaTodosLancamentoPorMes(MesDoLancamento mes);
+    void deletaLancamento(UUID idLancamento);
 }
