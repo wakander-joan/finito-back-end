@@ -8,6 +8,7 @@ import com.management.finito.handler.APIException;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
 import com.management.finito.pessoa.application.api.*;
 import com.management.finito.pessoa.application.repository.PessoaRepository;
+import com.management.finito.pessoa.config.EmailService;
 import com.management.finito.pessoa.domain.Pessoa;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -24,12 +25,17 @@ import org.springframework.stereotype.Service;
 public class PessoaApplicationService implements PessoaService {
 	private final PessoaRepository pessoaRepository;
 	private final LancamentoRepository lancamentoRepository;
+	private final EmailService emailService;
 
 	@Override
 	public PessoaResponse criarPessoa(@Valid PessoaRequest pessoaRequeste) {
 		log.info("[inicia] PessoaApplicationService - criaPessoa");
 		validaEmailCadastrado(pessoaRequeste.getEmail());
 		Pessoa pessoa = pessoaRepository.salva(new Pessoa(pessoaRequeste));
+		String assunto = "Cadastro realizado com sucesso!";
+		String mensagem = String.format("Olá %s,\n\nSeu cadastro foi realizado com sucesso. Seja bem-vindo(a) a FINITO!", pessoa.getNomePessoa());
+		emailService.enviarEmail(pessoa.getEmail(), assunto, mensagem);
+		log.info("Email enviado com sucesso para, %s", pessoa.getEmail());
 		log.info("[finaliza] PessoaApplicationService - criaPessoa");
 		return PessoaResponse.builder().idPessoa(pessoa.getIdPessoa()).build();
 	}
