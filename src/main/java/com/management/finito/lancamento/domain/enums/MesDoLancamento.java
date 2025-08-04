@@ -29,9 +29,10 @@ public enum MesDoLancamento {
         this.mes = mes;
     }
 
-    public static MesDoLancamento fromId(int id) {
+    public static String fromId(int id) {
         return Arrays.stream(MesDoLancamento.values())
                 .filter(m -> m.getId() == id)
+                .map(MesDoLancamento::getMes)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Mês inválido para id: " + id));
     }

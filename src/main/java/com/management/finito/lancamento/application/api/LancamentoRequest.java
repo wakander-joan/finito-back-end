@@ -1,6 +1,7 @@
 package com.management.finito.lancamento.application.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.management.finito.lancamento.domain.enums.CategoriaLancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 import com.management.finito.lancamento.domain.enums.SatatusLancamento;
 import com.management.finito.lancamento.domain.enums.TipoLancamento;
@@ -27,4 +28,6 @@ public class LancamentoRequest {
     private SatatusLancamento status;
     @NotNull
     private TipoLancamento tipo;
+    @NotNull
+    private CategoriaLancamento categoriaLancamento;
 }

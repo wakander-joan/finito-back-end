@@ -1,6 +1,7 @@
 package com.management.finito.lancamento.application.api;
 
 import com.management.finito.lancamento.domain.Lancamento;
+import com.management.finito.lancamento.domain.enums.CategoriaLancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 import com.management.finito.lancamento.domain.enums.SatatusLancamento;
 import com.management.finito.lancamento.domain.enums.TipoLancamento;
@@ -19,9 +20,10 @@ public class LancamentoDetalhadoResponse {
     private String descricao;
     private Double preco;
     private LocalDate dataVencimento;
-    private SatatusLancamento status;
-    private TipoLancamento tipo;
-    private MesDoLancamento mesDoLancamento;
+    private String status;
+    private String tipo;
+    private String mesDoLancamento;
+    private String categoriaLancamento;
 
     public LancamentoDetalhadoResponse(Lancamento lancamento) {
         this.idLancamento = lancamento.getIdLancamento();
@@ -31,6 +33,7 @@ public class LancamentoDetalhadoResponse {
         this.status = SatatusLancamento.fromId(lancamento.getStatus());
         this.tipo = TipoLancamento.fromId(lancamento.getTipo());
         this.mesDoLancamento = MesDoLancamento.fromId(lancamento.getMesDoLancamento());
+        this.categoriaLancamento = CategoriaLancamento.fromId(lancamento.getCategoriaLancamento());
     }
 
     public static List<LancamentoDetalhadoResponse> converte(List<Lancamento> lancamentos) {

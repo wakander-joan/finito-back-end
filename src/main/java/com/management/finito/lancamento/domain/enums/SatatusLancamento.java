@@ -19,9 +19,10 @@ public enum SatatusLancamento {
         this.status = status;
     }
 
-    public static SatatusLancamento fromId(Integer id) {
+    public static String fromId(Integer id) {
         return Arrays.stream(SatatusLancamento.values())
                 .filter(s -> s.getId().equals(id))
+                .map(SatatusLancamento::getStatus)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Status inválido para id: " + id));
     }

@@ -19,9 +19,10 @@ public enum TipoLancamento {
         this.tipo = tipo;
     }
 
-    public static TipoLancamento fromId(Integer id) {
+    public static String fromId(Integer id) {
         return Arrays.stream(TipoLancamento.values())
                 .filter(t -> t.getId().equals(id))
+                .map(TipoLancamento::getTipo)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Tipo inválido para id: " + id));
     }

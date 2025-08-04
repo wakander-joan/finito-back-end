@@ -1,6 +1,7 @@
 package com.management.finito.lancamento.domain;
 
 import com.management.finito.lancamento.application.api.LancamentoRequest;
+import com.management.finito.lancamento.domain.enums.CategoriaLancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 import com.management.finito.lancamento.domain.enums.SatatusLancamento;
 import com.management.finito.lancamento.domain.enums.TipoLancamento;
@@ -30,6 +31,7 @@ public class Lancamento {
     private int tipo;
     private int mesDoLancamento;
     private int ano;
+    private int categoriaLancamento;
 
     public Lancamento(LancamentoRequest lancamentoRequest, UUID idPessoa, MesDoLancamento mes, int ano) {
         this.idPessoa = idPessoa;
@@ -40,6 +42,7 @@ public class Lancamento {
         this.tipo = lancamentoRequest.getTipo().getId();
         this.mesDoLancamento = mes.getId();
         this.ano = ano;
+        this.categoriaLancamento = lancamentoRequest.getCategoriaLancamento().getId();
     }
 
 }
