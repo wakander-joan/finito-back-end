@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,5 +56,13 @@ public class LancamentoInfraRepository implements LancamentoRepository {
         log.info("[start] LancamentoInfraRepository - deletaTodosLancamento");
         lancamentoJPARepository.deleteAllByIdPessoa(idPessoa);
         log.info("[finish] LancamentoInfraRepository - deletaTodosLancamento");
+    }
+
+    @Override
+    public List<Lancamento> findByDataVencimento(LocalDate hoje) {
+        log.info("[start] LancamentoInfraRepository - findByDataVencimento");
+        List<Lancamento> lancamentos = lancamentoJPARepository.findAllByDataVencimentoAndTipo(hoje, 2);
+        log.info("[finish] LancamentoInfraRepository - findByDataVencimento");
+        return lancamentos;
     }
 }

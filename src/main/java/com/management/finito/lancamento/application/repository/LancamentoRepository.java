@@ -3,6 +3,7 @@ package com.management.finito.lancamento.application.repository;
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,4 +13,5 @@ public interface LancamentoRepository {
     List<Lancamento> buscaTodosLancamentoPorMes(MesDoLancamento mes, UUID idPessoa);
     void deletaLancamento(UUID idLancamento);
     void deletaTodosLancamento(UUID idPessoa);
+    List<Lancamento> findByDataVencimento(LocalDate hoje);
 }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 @ToString
 public enum TipoLancamento {
     RECEITA (1, "RECEITA"),
-    DESPESA (1, "DESPESA");
+    DESPESA (2, "DESPESA");
 
     private Integer id;
     private String tipo;

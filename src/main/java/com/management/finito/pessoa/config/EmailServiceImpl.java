@@ -1,5 +1,6 @@
 package com.management.finito.pessoa.config;
 
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -72,5 +73,22 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException("Erro ao enviar e-mail", e);
         }
         log.info("[finish] EmailServiceImpl - enviarEmail");
+    }
+
+    @Override
+    public void enviarEmailHtml(String para, String assunto, String html) {
+        log.info("[start] EmailServiceImpl - enviarEmailHtml");
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setTo(para);
+            helper.setSubject(assunto);
+            helper.setText(html, true); // true = HTML
+
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            log.error("Erro ao enviar email HTML", e);
+        }
+        log.info("[finish] EmailServiceImpl - enviarEmailHtml");
     }
 }
