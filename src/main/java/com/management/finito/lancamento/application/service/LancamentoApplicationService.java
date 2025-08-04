@@ -6,6 +6,7 @@ import com.management.finito.lancamento.application.api.LancamentoResponse;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
+import com.management.finito.pessoa.application.repository.PessoaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ import java.util.UUID;
 @Service
 public class LancamentoApplicationService implements LancamentoService {
     private final LancamentoRepository lancamentoRepository;
+    private final PessoaRepository pessoaRepository;
 
     @Override
     public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest) {
         log.info("[start] LancamentoApplicationService - cadastraLancamento");
+        pessoaRepository.buscaPessoaPorId(lancamentoRequest.getIdPessoa());
         Lancamento lancamentoCriado = lancamentoRepository.salva(new Lancamento(lancamentoRequest));
         log.info("[finish] LancamentoApplicationService - cadastraLancamento");
         return new LancamentoResponse(lancamentoCriado);

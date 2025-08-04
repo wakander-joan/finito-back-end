@@ -20,6 +20,8 @@ public class Lancamento {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "uuid", updatable = false, unique = true, nullable = false)
     private UUID idLancamento;
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID idPessoa;
     private String descricao;
     private Double preco;
     private LocalDate dataVencimento;
@@ -28,6 +30,7 @@ public class Lancamento {
     private int mesDoLancamento;
 
     public Lancamento(LancamentoRequest lancamentoRequest) {
+        this.idPessoa = lancamentoRequest.getIdPessoa();
         this.descricao = lancamentoRequest.getDescricao();
         this.preco = lancamentoRequest.getPreco();
         this.dataVencimento = lancamentoRequest.getDataVencimento();
