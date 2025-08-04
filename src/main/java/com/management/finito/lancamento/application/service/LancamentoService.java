@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LancamentoService {
-    LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest);
+    LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest, MesDoLancamento mes, int ano);
     LancamentoDetalhadoResponse buscaLancamento(UUID idLancamento);
     List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(MesDoLancamento mes);
+
     void deletaLancamento(UUID idLancamento);
 }

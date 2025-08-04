@@ -27,6 +27,4 @@ public class LancamentoRequest {
     private SatatusLancamento status;
     @NotNull
     private TipoLancamento tipo;
-    @NotNull
-    private MesDoLancamento mesDoLancamento;
 }

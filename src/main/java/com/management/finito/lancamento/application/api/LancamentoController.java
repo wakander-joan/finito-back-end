@@ -18,9 +18,9 @@ public class LancamentoController implements LancamentoAPI {
     private final LancamentoService lancamentoService;
 
     @Override
-    public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest) {
+    public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest, MesDoLancamento mes, int ano) {
         log.info("[start] LancamentoController - cadastraLancamento");
-        LancamentoResponse response = lancamentoService.cadastraLancamento(lancamentoRequest);
+        LancamentoResponse response = lancamentoService.cadastraLancamento(lancamentoRequest, mes, ano);
         log.info("[finish] LancamentoController - cadastraLancamento");
         return response;
     }

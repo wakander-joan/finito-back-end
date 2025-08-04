@@ -12,9 +12,9 @@ import java.util.UUID;
 @RequestMapping("/lancamento")
 public interface LancamentoAPI {
 
-    @PostMapping("/cadastraLancamento")
+    @PostMapping("/cadastraLancamento/{mes}/{ano}")
     @ResponseStatus(code = HttpStatus.CREATED)
-    LancamentoResponse cadastraLancamento (@Valid @RequestBody LancamentoRequest LancamentoRequest);
+    LancamentoResponse cadastraLancamento (@Valid @RequestBody LancamentoRequest LancamentoRequest, @PathVariable MesDoLancamento mes, @PathVariable int ano);
 
     @GetMapping("/buscaLancamento/{idLancamento}")
     @ResponseStatus(code = HttpStatus.OK)

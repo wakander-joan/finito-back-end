@@ -24,11 +24,11 @@ public class LancamentoApplicationService implements LancamentoService {
     private final PessoaRepository pessoaRepository;
 
     @Override
-    public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest) {
+    public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest, MesDoLancamento mes, int ano) {
         log.info("[start] LancamentoApplicationService - cadastraLancamento");
         Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Pega o Id do token
         pessoaRepository.buscaPessoaPorId(pessoa.getIdPessoa());
-        Lancamento lancamentoCriado = lancamentoRepository.salva(new Lancamento(lancamentoRequest, pessoa.getIdPessoa()));
+        Lancamento lancamentoCriado = lancamentoRepository.salva(new Lancamento(lancamentoRequest, pessoa.getIdPessoa(),mes, ano));
         log.info("[finish] LancamentoApplicationService - cadastraLancamento");
         return new LancamentoResponse(lancamentoCriado);
     }
