@@ -7,5 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LancamentoJPARepository  extends JpaRepository<Lancamento, UUID> {
-    List<Lancamento> findAllByMesDoLancamento(int id);
+    void deleteAllByIdPessoa(UUID idPessoa);
+    List<Lancamento> findAllByMesDoLancamentoAndIdPessoa(int id, UUID idPessoa);
 }

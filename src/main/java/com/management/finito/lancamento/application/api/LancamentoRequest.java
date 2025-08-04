@@ -16,8 +16,6 @@ import java.util.UUID;
 @Getter
 @ToString
 public class LancamentoRequest {
-    @NotNull
-    private UUID idPessoa;
     @NotBlank
     private String descricao;
     @NotNull

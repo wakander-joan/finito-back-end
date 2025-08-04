@@ -29,8 +29,8 @@ public class Lancamento {
     private int tipo;
     private int mesDoLancamento;
 
-    public Lancamento(LancamentoRequest lancamentoRequest) {
-        this.idPessoa = lancamentoRequest.getIdPessoa();
+    public Lancamento(LancamentoRequest lancamentoRequest, UUID idPessoa) {
+        this.idPessoa = idPessoa;
         this.descricao = lancamentoRequest.getDescricao();
         this.preco = lancamentoRequest.getPreco();
         this.dataVencimento = lancamentoRequest.getDataVencimento();

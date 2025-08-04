@@ -36,9 +36,9 @@ public class LancamentoInfraRepository implements LancamentoRepository {
     }
 
     @Override
-    public List<Lancamento> buscaTodosLancamentoPorMes(MesDoLancamento mes) {
+    public List<Lancamento> buscaTodosLancamentoPorMes(MesDoLancamento mes, UUID idPessoa) {
         log.info("[start] LancamentoInfraRepository - buscaTodosLancamentoPorMes");
-        List<Lancamento> listaDeLancamentos = lancamentoJPARepository.findAllByMesDoLancamento(mes.getId());
+        List<Lancamento> listaDeLancamentos = lancamentoJPARepository.findAllByMesDoLancamentoAndIdPessoa(mes.getId(), idPessoa);
         log.info("[finish] LancamentoInfraRepository - buscaTodosLancamentoPorMes");
         return listaDeLancamentos;
     }
@@ -48,5 +48,12 @@ public class LancamentoInfraRepository implements LancamentoRepository {
         log.info("[start] LancamentoInfraRepository - deletaLancamento");
         lancamentoJPARepository.deleteById(idLancamento);
         log.info("[finish] LancamentoInfraRepository - deletaLancamento");
+    }
+
+    @Override
+    public void deletaTodosLancamento(UUID idPessoa) {
+        log.info("[start] LancamentoInfraRepository - deletaTodosLancamento");
+        lancamentoJPARepository.deleteAllByIdPessoa(idPessoa);
+        log.info("[finish] LancamentoInfraRepository - deletaTodosLancamento");
     }
 }

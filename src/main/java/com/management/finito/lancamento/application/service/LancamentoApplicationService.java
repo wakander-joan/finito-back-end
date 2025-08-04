@@ -7,8 +7,10 @@ import com.management.finito.lancamento.application.repository.LancamentoReposit
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 import com.management.finito.pessoa.application.repository.PessoaRepository;
+import com.management.finito.pessoa.domain.Pessoa;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +26,9 @@ public class LancamentoApplicationService implements LancamentoService {
     @Override
     public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest) {
         log.info("[start] LancamentoApplicationService - cadastraLancamento");
-        pessoaRepository.buscaPessoaPorId(lancamentoRequest.getIdPessoa());
-        Lancamento lancamentoCriado = lancamentoRepository.salva(new Lancamento(lancamentoRequest));
+        Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Pega o Id do token
+        pessoaRepository.buscaPessoaPorId(pessoa.getIdPessoa());
+        Lancamento lancamentoCriado = lancamentoRepository.salva(new Lancamento(lancamentoRequest, pessoa.getIdPessoa()));
         log.info("[finish] LancamentoApplicationService - cadastraLancamento");
         return new LancamentoResponse(lancamentoCriado);
     }
@@ -41,7 +44,8 @@ public class LancamentoApplicationService implements LancamentoService {
     @Override
     public List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(MesDoLancamento mes) {
         log.info("[start] LancamentoApplicationService - buscaTodosLancamentoPorMes");
-        List<Lancamento> lancamentos = lancamentoRepository.buscaTodosLancamentoPorMes(mes);
+        Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Lancamento> lancamentos = lancamentoRepository.buscaTodosLancamentoPorMes(mes, pessoa.getIdPessoa());
         log.info("[finish] LancamentoApplicationService - buscaTodosLancamentoPorMes");
         return LancamentoDetalhadoResponse.converte(lancamentos);
     }

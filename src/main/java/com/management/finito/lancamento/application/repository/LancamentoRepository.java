@@ -9,6 +9,7 @@ import java.util.UUID;
 public interface LancamentoRepository {
     Lancamento salva(Lancamento lancamento);
     Lancamento buscaLancamento(UUID idLancamento);
-    List<Lancamento> buscaTodosLancamentoPorMes(MesDoLancamento mes);
+    List<Lancamento> buscaTodosLancamentoPorMes(MesDoLancamento mes, UUID idPessoa);
     void deletaLancamento(UUID idLancamento);
+    void deletaTodosLancamento(UUID idPessoa);
 }

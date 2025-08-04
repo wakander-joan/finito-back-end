@@ -5,6 +5,7 @@ import java.util.UUID;
 
 
 import com.management.finito.handler.APIException;
+import com.management.finito.lancamento.application.repository.LancamentoRepository;
 import com.management.finito.pessoa.application.api.*;
 import com.management.finito.pessoa.application.repository.PessoaRepository;
 import com.management.finito.pessoa.domain.Pessoa;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PessoaApplicationService implements PessoaService {
 	private final PessoaRepository pessoaRepository;
+	private final LancamentoRepository lancamentoRepository;
 
 	@Override
 	public PessoaResponse criarPessoa(@Valid PessoaRequest pessoaRequeste) {
@@ -63,6 +65,7 @@ public class PessoaApplicationService implements PessoaService {
 		log.info("[inicia] PessoaApplicationService - deletaPessoaPorId");
 		pessoaRepository.buscaPessoaPorId(idPessoa);
 		pessoaRepository.deletaPessoaPorId(idPessoa);
+		lancamentoRepository.deletaTodosLancamento(idPessoa);
 		log.info("[finaliza] PessoaApplicationService - deletaPessoaPorId");
 	}
 
