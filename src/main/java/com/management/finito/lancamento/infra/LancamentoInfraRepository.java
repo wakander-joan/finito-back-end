@@ -37,9 +37,9 @@ public class LancamentoInfraRepository implements LancamentoRepository {
     }
 
     @Override
-    public List<Lancamento> buscaTodosLancamentoPorMes(MesDoLancamento mes, UUID idPessoa) {
+    public List<Lancamento> buscaLancamentosPorMesEAno(MesDoLancamento mes, UUID idPessoa, int ano) {
         log.info("[start] LancamentoInfraRepository - buscaTodosLancamentoPorMes");
-        List<Lancamento> listaDeLancamentos = lancamentoJPARepository.findAllByMesDoLancamentoAndIdPessoa(mes.getId(), idPessoa);
+        List<Lancamento> listaDeLancamentos = lancamentoJPARepository.findAllByMesDoLancamentoAndIdPessoaAndAno(mes.getId(),idPessoa,ano);
         log.info("[finish] LancamentoInfraRepository - buscaTodosLancamentoPorMes");
         return listaDeLancamentos;
     }

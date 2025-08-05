@@ -20,11 +20,23 @@ public interface LancamentoAPI {
     @ResponseStatus(code = HttpStatus.OK)
     LancamentoDetalhadoResponse buscaLancamento (@PathVariable UUID idLancamento);
 
-    @GetMapping("/buscaTodosLancamentoPorMes/{mes}")
+    @GetMapping("/buscaLancamentosPorMesEAno/{mes}/{ano}")
     @ResponseStatus(code = HttpStatus.OK)
-    List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(@PathVariable MesDoLancamento mes);
+    List<LancamentoDetalhadoResponse> buscaLancamentosPorMesEAno(@PathVariable MesDoLancamento mes, @PathVariable int ano);
 
     @DeleteMapping("/deletaLancamento/{idLancamento}")
     @ResponseStatus(code = HttpStatus.OK)
     void deletaLancamento(@PathVariable UUID idLancamento);
+
+    @PatchMapping(value = "/edita/{idLancamento}")
+    @ResponseStatus(code = HttpStatus.OK)
+    void editaLancamento (@PathVariable UUID idLancamento, @Valid @RequestBody LancamentoAlteracaoRequest lancamentoAlteracaoRequest);
+
+    @PatchMapping(value = "/statusPendente/{idLancamento}")
+    @ResponseStatus(code = HttpStatus.OK)
+    void mudaStatusParaPendente (@PathVariable UUID idLancamento);
+
+    @PatchMapping(value = "/statusPago/{idLancamento}")
+    @ResponseStatus(code = HttpStatus.OK)
+    void mudaStatusParaPago (@PathVariable UUID idLancamento);
 }

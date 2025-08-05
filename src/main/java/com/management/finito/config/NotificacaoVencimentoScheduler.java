@@ -25,8 +25,7 @@ public class NotificacaoVencimentoScheduler {
     private final PessoaRepository pessoaRepository;
     private final EmailService emailService;
 
-    //@Scheduled(cron = "0 0 8 * * *") // Executa todo dia às 08:00 da manhã
-    @Scheduled(cron = "0 41 20 * * *") // Executa todo dia às 80:20 da noite
+    @Scheduled(cron = "0 0 8 * * *") // Executa todo dia às 08:00 da manhã
     public void notificarVencimentosDoDia() {
         log.info("[start] NotificacaoVencimentoScheduler - notificarVencimentosDoDia");
 

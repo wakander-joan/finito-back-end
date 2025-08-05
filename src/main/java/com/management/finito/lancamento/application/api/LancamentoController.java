@@ -34,9 +34,9 @@ public class LancamentoController implements LancamentoAPI {
     }
 
     @Override
-    public List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(MesDoLancamento mes) {
+    public List<LancamentoDetalhadoResponse> buscaLancamentosPorMesEAno(MesDoLancamento mes, int ano) {
         log.info("[start] LancamentoController - buscaTodosLancamentoPorMes");
-        List<LancamentoDetalhadoResponse> listaDeLancamentos = lancamentoService.buscaTodosLancamentoPorMes(mes);
+        List<LancamentoDetalhadoResponse> listaDeLancamentos = lancamentoService.buscaLancamentosPorMesEAno(mes, ano);
         log.info("[finish] LancamentoController - buscaTodosLancamentoPorMes");
         return listaDeLancamentos;
     }
@@ -46,5 +46,26 @@ public class LancamentoController implements LancamentoAPI {
         log.info("[start] LancamentoController - deletaLancamento");
         lancamentoService.deletaLancamento(idLancamento);
         log.info("[finish] LancamentoController - deletaLancamento");
+    }
+
+    @Override
+    public void editaLancamento(UUID idLancamento, LancamentoAlteracaoRequest lancamentoAlteracaoRequest) {
+        log.info("[start] LancamentoController - editaLancamento");
+        lancamentoService.editaLancamento(idLancamento, lancamentoAlteracaoRequest);
+        log.info("[finish] LancamentoController - editaLancamento");
+    }
+
+    @Override
+    public void mudaStatusParaPendente(UUID idLancamento) {
+        log.info("[start] LancamentoController - mudaStatusParaPendente");
+        lancamentoService.mudaStatusParaPendente(idLancamento);
+        log.info("[finish] LancamentoController - mudaStatusParaPendente");
+    }
+
+    @Override
+    public void mudaStatusParaPago(UUID idLancamento) {
+        log.info("[start] LancamentoController - mudaStatusParaPago");
+        lancamentoService.mudaStatusParaPago(idLancamento);
+        log.info("[finish] LancamentoController - mudaStatusParaPago");
     }
 }

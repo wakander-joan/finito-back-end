@@ -1,5 +1,6 @@
 package com.management.finito.lancamento.application.service;
 
+import com.management.finito.lancamento.application.api.LancamentoAlteracaoRequest;
 import com.management.finito.lancamento.application.api.LancamentoDetalhadoResponse;
 import com.management.finito.lancamento.application.api.LancamentoRequest;
 import com.management.finito.lancamento.application.api.LancamentoResponse;
@@ -42,10 +43,10 @@ public class LancamentoApplicationService implements LancamentoService {
     }
 
     @Override
-    public List<LancamentoDetalhadoResponse> buscaTodosLancamentoPorMes(MesDoLancamento mes) {
+    public List<LancamentoDetalhadoResponse> buscaLancamentosPorMesEAno(MesDoLancamento mes, int ano) {
         log.info("[start] LancamentoApplicationService - buscaTodosLancamentoPorMes");
         Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Lancamento> lancamentos = lancamentoRepository.buscaTodosLancamentoPorMes(mes, pessoa.getIdPessoa());
+        List<Lancamento> lancamentos = lancamentoRepository.buscaLancamentosPorMesEAno(mes, pessoa.getIdPessoa(), ano);
         log.info("[finish] LancamentoApplicationService - buscaTodosLancamentoPorMes");
         return LancamentoDetalhadoResponse.converte(lancamentos);
     }
@@ -56,5 +57,32 @@ public class LancamentoApplicationService implements LancamentoService {
         lancamentoRepository.buscaLancamento(idLancamento);
         lancamentoRepository.deletaLancamento(idLancamento);
         log.info("[finish] LancamentoApplicationService - deletaLancamento");
+    }
+
+    @Override
+    public void editaLancamento(UUID idLancamento, LancamentoAlteracaoRequest lancamentoAlteracaoRequest) {
+        log.info("[start] LancamentoApplicationService - editaLancamento");
+        Lancamento lancamento = lancamentoRepository.buscaLancamento(idLancamento);
+        lancamento.atualiza(lancamentoAlteracaoRequest);
+        lancamentoRepository.salva(lancamento);
+        log.info("[finish] LancamentoApplicationService - editaLancamento");
+    }
+
+    @Override
+    public void mudaStatusParaPendente(UUID idLancamento) {
+        log.info("[start] LancamentoApplicationService - mudaStatusParaPendente");
+        Lancamento lancamento = lancamentoRepository.buscaLancamento(idLancamento);
+        lancamento.mudaStatusParaPendente();
+        lancamentoRepository.salva(lancamento);
+        log.info("[finish] LancamentoApplicationService - mudaStatusParaPendente");
+    }
+
+    @Override
+    public void mudaStatusParaPago(UUID idLancamento) {
+        log.info("[start] LancamentoApplicationService - mudaStatusParaPago");
+        Lancamento lancamento = lancamentoRepository.buscaLancamento(idLancamento);
+        lancamento.mudaStatusParaPago();
+        lancamentoRepository.salva(lancamento);
+        log.info("[finish] LancamentoApplicationService - mudaStatusParaPago");
     }
 }
