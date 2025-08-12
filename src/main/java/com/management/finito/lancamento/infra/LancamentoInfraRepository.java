@@ -31,7 +31,7 @@ public class LancamentoInfraRepository implements LancamentoRepository {
     public Lancamento buscaLancamento(UUID idLancamento) {
         log.info("[start] LancamentoInfraRepository - buscaLancamento");
         Lancamento lancamento = lancamentoJPARepository.findById(idLancamento)
-                .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+                .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Lançamento não encontrado"));
         log.info("[finish] LancamentoInfraRepository - buscaLancamento");
         return lancamento;
     }

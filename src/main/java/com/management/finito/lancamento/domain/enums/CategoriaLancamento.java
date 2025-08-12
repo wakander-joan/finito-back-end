@@ -12,23 +12,24 @@ public enum CategoriaLancamento {
     // Despesas
     MORADIA             (1, "Moradia"),
     TRANSPORTE          (2, "Transporte"),
-    ALIMENTACAO         (3, "Alimentação"),
+    ALIMENTACAO         (3, "Alimentacao"),
     SAUDE               (4, "Saúde"),
-    EDUCACAO            (5, "Educação"),
+    EDUCACAO            (5, "Educacao"),
     LAZER               (6, "Lazer"),
-    VESTUARIO           (7, "Vestuário"),
-    SERVICOS            (8, "Serviços"),
-    PETS                (9, "Animais de Estimação"),
+    VESTUARIO           (7, "Vestuario"),
+    SERVICOS            (8, "Servicos"),
+    PETS                (9, "Animais de Estimacao"),
     IMPOSTOS            (10, "Impostos e Taxas"),
-    OUTRAS_DESPESAS     (11, "Outras Despesas"),
+    OUTRAS_DESPESAS     (11, "Outras Despesas" +
+            "as"),
 
     // Receitas
-    SALARIO             (12, "Salário"),
+    SALARIO             (12, "Salario"),
     FREELANCE           (13, "Freelance"),
     ALUGUEL_RECEBIDO    (14, "Aluguel Recebido"),
     INVESTIMENTOS       (15, "Investimentos"),
     REEMBOLSOS          (16, "Reembolsos"),
-    PREMIOS             (17, "Prêmios"),
+    PREMIOS             (17, "Premios"),
     VENDAS              (18, "Vendas"),
     AJUDAS              (19, "Ajudas"),
     OUTRAS_RECEITAS     (20, "Outras Receitas");
