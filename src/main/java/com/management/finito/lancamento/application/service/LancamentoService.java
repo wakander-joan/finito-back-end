@@ -1,9 +1,6 @@
 package com.management.finito.lancamento.application.service;
 
-import com.management.finito.lancamento.application.api.LancamentoAlteracaoRequest;
-import com.management.finito.lancamento.application.api.LancamentoDetalhadoResponse;
-import com.management.finito.lancamento.application.api.LancamentoRequest;
-import com.management.finito.lancamento.application.api.LancamentoResponse;
+import com.management.finito.lancamento.application.api.*;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 
 import java.util.List;
@@ -17,4 +14,5 @@ public interface LancamentoService {
     void editaLancamento(UUID idLancamento, LancamentoAlteracaoRequest lancamentoAlteracaoRequest);
     void mudaStatusParaPendente(UUID idLancamento);
     void mudaStatusParaPago(UUID idLancamento);
+    void replicaLancamentos(ReplicaLancamentosRequest replicaLancamentosRequest);
 }

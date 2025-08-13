@@ -65,4 +65,11 @@ public class LancamentoInfraRepository implements LancamentoRepository {
         log.info("[finish] LancamentoInfraRepository - findByDataVencimento");
         return lancamentos;
     }
+
+    @Override
+    public void savaTodosLancamentos(List<Lancamento> novosLancamentos) {
+        log.info("[start] LancamentoInfraRepository - savaTodosLancamentos");
+        lancamentoJPARepository.saveAll(novosLancamentos);
+        log.info("[finish] LancamentoInfraRepository - savaTodosLancamentos");
+    }
 }

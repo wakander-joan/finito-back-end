@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
+@Setter
 @ToString
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -46,6 +47,18 @@ public class Lancamento {
         this.mesDoLancamento = mes.getId();
         this.ano = ano;
         this.categoriaLancamento = lancamentoRequest.getCategoriaLancamento().getId();
+    }
+
+    public Lancamento(Lancamento lancamento) {
+        this.idPessoa = lancamento.getIdPessoa();
+        this.descricao = lancamento.getDescricao();
+        this.preco = lancamento.getPreco();
+        this.dataVencimento = lancamento.getDataVencimento();
+        this.status = lancamento.getStatus();
+        this.tipo = lancamento.getTipo();
+        this.mesDoLancamento = lancamento.getMesDoLancamento();
+        this.ano = lancamento.getAno();
+        this.categoriaLancamento = lancamento.categoriaLancamento;
     }
 
     public void atualiza(LancamentoAlteracaoRequest lancamentoAlteracaoRequest) {

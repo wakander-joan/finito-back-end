@@ -68,4 +68,11 @@ public class LancamentoController implements LancamentoAPI {
         lancamentoService.mudaStatusParaPago(idLancamento);
         log.info("[finish] LancamentoController - mudaStatusParaPago");
     }
+
+    @Override
+    public void replicaLancamentos(ReplicaLancamentosRequest replicaLancamentosRequest) {
+        log.info("[start] LancamentoController - copiaLancamentos");
+        lancamentoService.replicaLancamentos(replicaLancamentosRequest);
+        log.info("[finish] LancamentoController - copiaLancamentos");
+    }
 }

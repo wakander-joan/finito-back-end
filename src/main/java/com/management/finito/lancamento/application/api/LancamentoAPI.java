@@ -39,4 +39,8 @@ public interface LancamentoAPI {
     @PatchMapping(value = "/statusPago/{idLancamento}")
     @ResponseStatus(code = HttpStatus.OK)
     void mudaStatusParaPago (@PathVariable UUID idLancamento);
+
+    @PostMapping("/replicaLancamentos")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    void replicaLancamentos(@Valid @RequestBody ReplicaLancamentosRequest replicaLancamentosRequest);
 }

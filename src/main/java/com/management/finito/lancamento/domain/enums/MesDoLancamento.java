@@ -36,4 +36,11 @@ public enum MesDoLancamento {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Mês inválido para id: " + id));
     }
+
+    public static MesDoLancamento fromMes(int id) {
+        return Arrays.stream(MesDoLancamento.values())
+                .filter(m -> m.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Mês inválido para id: " + id));
+    }
 }

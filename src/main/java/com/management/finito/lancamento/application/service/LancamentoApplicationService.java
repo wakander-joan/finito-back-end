@@ -1,9 +1,6 @@
 package com.management.finito.lancamento.application.service;
 
-import com.management.finito.lancamento.application.api.LancamentoAlteracaoRequest;
-import com.management.finito.lancamento.application.api.LancamentoDetalhadoResponse;
-import com.management.finito.lancamento.application.api.LancamentoRequest;
-import com.management.finito.lancamento.application.api.LancamentoResponse;
+import com.management.finito.lancamento.application.api.*;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
@@ -14,8 +11,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -84,5 +84,33 @@ public class LancamentoApplicationService implements LancamentoService {
         lancamento.mudaStatusParaPago();
         lancamentoRepository.salva(lancamento);
         log.info("[finish] LancamentoApplicationService - mudaStatusParaPago");
+    }
+
+    @Override
+    public void replicaLancamentos(ReplicaLancamentosRequest replicaLancamentosRequest) {
+        log.info("[start] LancamentoApplicationService - replicaLancamentos");
+        Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Lancamento> lancamentosOriginais = lancamentoRepository.buscaLancamentosPorMesEAno(MesDoLancamento.fromMes(replicaLancamentosRequest.getMesBase()), pessoa.getIdPessoa(),replicaLancamentosRequest.getAnoBase());
+        List<Lancamento> novosLancamentos = lancamentosOriginais.stream()
+                .map(l -> {
+                    Lancamento novo = new Lancamento(l); // Construtor copia dados do original
+                    novo.setMesDoLancamento(replicaLancamentosRequest.getMesDestino());
+                    novo.setAno(replicaLancamentosRequest.getAnoDestino());
+
+                    // Ajusta data de vencimento mantendo o dia, mas corrigindo se for inválido
+                    int anoDestino = replicaLancamentosRequest.getAnoDestino();
+                    int mesDestino = replicaLancamentosRequest.getMesDestino();
+                    int diaOriginal = l.getDataVencimento().getDayOfMonth();
+                    YearMonth yearMonthDestino = YearMonth.of(anoDestino, mesDestino);
+                    int ultimoDiaDoMes = yearMonthDestino.lengthOfMonth();
+                    int novoDia = Math.min(diaOriginal, ultimoDiaDoMes);
+
+                    LocalDate novaDataVencimento = LocalDate.of(anoDestino, mesDestino, novoDia);
+                    novo.setDataVencimento(novaDataVencimento);
+                    return novo;
+                })
+                .collect(Collectors.toList());
+        lancamentoRepository.savaTodosLancamentos(novosLancamentos);
+        log.info("[finish] LancamentoApplicationService - replicaLancamentos");
     }
 }

@@ -14,4 +14,5 @@ public interface LancamentoRepository {
     void deletaLancamento(UUID idLancamento);
     void deletaTodosLancamento(UUID idPessoa);
     List<Lancamento> findByDataVencimento(LocalDate hoje);
+    void savaTodosLancamentos(List<Lancamento> novosLancamentos);
 }
