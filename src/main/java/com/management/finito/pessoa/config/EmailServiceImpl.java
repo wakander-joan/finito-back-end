@@ -64,7 +64,7 @@ public class EmailServiceImpl implements EmailService {
 
             helper.setText(htmlComImagem, true);
 
-            File imagem = new File("src/main/resources/static/images/finito-logo.png");
+            File imagem = new File("C:/finito-logo.png");
             helper.addInline("logoFinito", imagem);
             javaMailSender.send(message);
 
