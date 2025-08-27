@@ -24,4 +24,6 @@ public class PessoaRequest {
 	private String email;
 	@NotBlank
 	private String senha;
+	@NotNull
+	private int perfil;
 }

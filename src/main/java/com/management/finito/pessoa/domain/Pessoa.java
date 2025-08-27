@@ -1,6 +1,5 @@
 package com.management.finito.pessoa.domain;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,7 +8,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.management.finito.pessoa.application.api.PessoaAlteracaoRequest;
 import com.management.finito.pessoa.application.api.PessoaRequest;
@@ -35,11 +33,13 @@ public class Pessoa {
 	@JsonIgnore
 	@Column(nullable = false)
 	private String senha;
+	private int perfil;
 
 	public Pessoa(PessoaRequest pessoaRequest) {
 		this.nomePessoa = pessoaRequest.getNomePessoa();
 		this.email = pessoaRequest.getEmail();
 		this.senha = new BCryptPasswordEncoder().encode(pessoaRequest.getSenha());
+		this.perfil = pessoaRequest.getPerfil();
 	}
 
 	public void edita(@Valid PessoaAlteracaoRequest pessoaAlteracaoRequest) {
