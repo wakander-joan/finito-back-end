@@ -1,5 +1,6 @@
 package com.management.finito.meta.domain;
 
+import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.meta.application.api.MetaRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import lombok.*;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -43,4 +45,24 @@ public class Meta {
         log.info("[finish] Meta - setaMeta");
     }
 
+    public void alteraParcelasTotais(List<Lancamento> lancamentos) {
+        lancamentos.forEach(c -> parcelasTotais++);
+    }
+
+    public void addParcelaPaga() {
+        this.parcelasPagas ++;
+    }
+
+    public void removeParcelaPaga() {
+        if (this.parcelasPagas > 0) { // Impede que fique com valor negativo!
+            this.parcelasPagas--;
+        }
+    }
+
+    public void removeTotalDeParcelas(Double preco) {
+        if (this.parcelasTotais > 0) { // Impede que fique com valor negativo!
+            this.parcelasTotais--;
+        }
+        this.valorAlvo = valorAlvo - preco;
+    }
 }

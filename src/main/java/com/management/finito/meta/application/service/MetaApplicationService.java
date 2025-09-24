@@ -1,5 +1,6 @@
 package com.management.finito.meta.application.service;
 
+import com.management.finito.lancamento.application.repository.LancamentoRepository;
 import com.management.finito.meta.application.api.MetaDatailResponse;
 import com.management.finito.meta.application.api.MetaListResponse;
 import com.management.finito.meta.application.api.MetaRequest;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Service
 public class MetaApplicationService implements MetaService {
     private final MetaRepository metaRepository;
+    private final LancamentoRepository lancamentoRepository;
 
     @Override
     public MetaResponse createMeta(MetaRequest metaRequest) {
@@ -48,6 +50,7 @@ public class MetaApplicationService implements MetaService {
         log.info("[start] MetaApplicationService - deletePlanningId");
         metaRepository.getMetaId(id);
         metaRepository.deleteMetaId(id);
+        lancamentoRepository.deleteAllLancamentosMeta(id);
         log.info("[finish] MetaApplicationService - deletePlanningId");
     }
 }

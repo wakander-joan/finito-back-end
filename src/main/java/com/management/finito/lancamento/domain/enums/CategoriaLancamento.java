@@ -33,7 +33,7 @@ public enum CategoriaLancamento {
     VENDAS              (18, "Vendas"),
     AJUDAS              (19, "Ajudas"),
     OUTRAS_RECEITAS     (20, "Outras Receitas"),
-    METAS               (21, "Metas");
+    META               (21, "Meta");
 
     private final int id;
     private final String descricao;

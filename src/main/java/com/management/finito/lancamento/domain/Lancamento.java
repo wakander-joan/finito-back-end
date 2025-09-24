@@ -1,17 +1,22 @@
 package com.management.finito.lancamento.domain;
 
 import com.management.finito.lancamento.application.api.LancamentoAlteracaoRequest;
+import com.management.finito.lancamento.application.api.LancamentoDetalhadoResponse;
+import com.management.finito.lancamento.application.api.LancamentoEmLoteRequest;
 import com.management.finito.lancamento.application.api.LancamentoRequest;
 import com.management.finito.lancamento.domain.enums.CategoriaLancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 import com.management.finito.lancamento.domain.enums.SatatusLancamento;
 import com.management.finito.lancamento.domain.enums.TipoLancamento;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -36,6 +41,7 @@ public class Lancamento {
     private int mesDoLancamento;
     private int ano;
     private int categoriaLancamento;
+    private int idMeta = 0;
 
     public Lancamento(LancamentoRequest lancamentoRequest, UUID idPessoa, MesDoLancamento mes, int ano) {
         this.idPessoa = idPessoa;
@@ -59,6 +65,24 @@ public class Lancamento {
         this.mesDoLancamento = lancamento.getMesDoLancamento();
         this.ano = lancamento.getAno();
         this.categoriaLancamento = lancamento.categoriaLancamento;
+        this.idMeta = lancamento.getIdMeta();
+    }
+
+    public Lancamento(@Valid LancamentoEmLoteRequest c, int idMeta, UUID idPessoa) {
+        this.idPessoa = idPessoa;
+        this.descricao = c.getDescricao();
+        this.preco = c.getPreco();
+        this.dataVencimento = c.getDataVencimento();
+        this.status = c.getStatus().getId();
+        this.tipo = c.getTipo().getId();
+        this.mesDoLancamento = c.getMesDoLancamento();
+        this.ano = c.getAno();
+        this.categoriaLancamento = c.getCategoriaLancamento().getId();
+        this.idMeta = idMeta;
+    }
+
+    public static List<Lancamento> criaLancamentosEmLote(List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, int idMeta, UUID idPessoa) {
+        return lancamentosEmLoteRequest.stream().map(c -> new Lancamento(c, idMeta, idPessoa)).collect(Collectors.toList());
     }
 
     public void atualiza(LancamentoAlteracaoRequest lancamentoAlteracaoRequest) {

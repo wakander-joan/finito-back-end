@@ -4,6 +4,7 @@ import com.management.finito.handler.APIException;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -72,4 +73,15 @@ public class LancamentoInfraRepository implements LancamentoRepository {
         lancamentoJPARepository.saveAll(novosLancamentos);
         log.info("[finish] LancamentoInfraRepository - savaTodosLancamentos");
     }
+
+    @Override
+    public void deleteAllLancamentosMeta(int id) {
+        log.info("[start] LancamentoInfraRepository - deleteAllLancamentosMeta");
+        List<Lancamento> lancamentos = lancamentoJPARepository.findAllByIdMeta(id);
+        for (Lancamento lancamento : lancamentos) {
+            lancamentoJPARepository.deleteById(lancamento.getIdLancamento());
+        }
+        log.info("[finish] LancamentoInfraRepository - deleteAllLancamentosMeta");
+    }
+
 }

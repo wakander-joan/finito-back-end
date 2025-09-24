@@ -17,7 +17,11 @@ public interface LancamentoAPI {
     @ResponseStatus(code = HttpStatus.CREATED)
     LancamentoResponse cadastraLancamento (@Valid @RequestBody LancamentoRequest LancamentoRequest, @PathVariable MesDoLancamento mes, @PathVariable int ano);
 
-    @GetMapping("/buscaLancamento/{idLancamento}")
+    @PostMapping("/cadastraLancamentoEmLote/{idMeta}")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    void cadastraLancamentoEmLote (@RequestBody List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, @PathVariable int idMeta);
+
+@GetMapping("/buscaLancamento/{idLancamento}")
     @ResponseStatus(code = HttpStatus.OK)
     LancamentoDetalhadoResponse buscaLancamento (@PathVariable UUID idLancamento);
 

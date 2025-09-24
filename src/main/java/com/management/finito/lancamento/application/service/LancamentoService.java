@@ -2,6 +2,7 @@ package com.management.finito.lancamento.application.service;
 
 import com.management.finito.lancamento.application.api.*;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,4 +16,5 @@ public interface LancamentoService {
     void mudaStatusParaPendente(UUID idLancamento);
     void mudaStatusParaPago(UUID idLancamento);
     void replicaLancamentos(ReplicaLancamentosRequest replicaLancamentosRequest);
+    void cadastraLancamentoEmLote(List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, int idMeta);
 }
