@@ -33,6 +33,10 @@ public interface LancamentoAPI {
     @ResponseStatus(code = HttpStatus.OK)
     void deletaLancamento(@PathVariable UUID idLancamento);
 
+    @DeleteMapping("/deletaAllLancamentoRecorrente/{idRecorrencia}")
+    @ResponseStatus(code = HttpStatus.OK)
+    void deletaAllLancamentoRecorrente (@PathVariable int idRecorrencia);
+
     @PatchMapping(value = "/edita/{idLancamento}")
     @ResponseStatus(code = HttpStatus.OK)
     void editaLancamento (@PathVariable UUID idLancamento, @Valid @RequestBody LancamentoAlteracaoRequest lancamentoAlteracaoRequest);

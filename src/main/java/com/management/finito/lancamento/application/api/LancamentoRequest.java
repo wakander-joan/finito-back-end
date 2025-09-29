@@ -30,4 +30,5 @@ public class LancamentoRequest {
     private TipoLancamento tipo;
     @NotNull
     private CategoriaLancamento categoriaLancamento;
+    private Boolean recorrente;
 }

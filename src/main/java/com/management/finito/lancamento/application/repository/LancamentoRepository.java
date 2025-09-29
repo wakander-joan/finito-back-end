@@ -16,4 +16,6 @@ public interface LancamentoRepository {
     List<Lancamento> findByDataVencimento(LocalDate hoje);
     void savaTodosLancamentos(List<Lancamento> novosLancamentos);
     void deleteAllLancamentosMeta(int id);
+    List<Lancamento> buscaLancamentoIdRecorrencia(int idRecorrencia);
+    void deleteAllLancamentosRecorrencia(List<Lancamento> lancamentos);
 }

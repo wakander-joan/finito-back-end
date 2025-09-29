@@ -2,8 +2,10 @@ package com.management.finito.lancamento.application.service;
 
 import com.management.finito.lancamento.application.api.*;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
+import com.management.finito.lancamento.domain.IdRecorrencia;
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
+import com.management.finito.lancamento.infra.RecorrenciaInfraJPARespository;
 import com.management.finito.meta.application.repository.MetaRepository;
 import com.management.finito.meta.domain.Meta;
 import com.management.finito.pessoa.application.repository.PessoaRepository;
@@ -27,15 +29,33 @@ public class LancamentoApplicationService implements LancamentoService {
     private final LancamentoRepository lancamentoRepository;
     private final PessoaRepository pessoaRepository;
     private final MetaRepository metaRepository;
+    private final RecorrenciaInfraJPARespository recorrenciaInfraJPARespository;
 
     @Override
     public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest, MesDoLancamento mes, int ano) {
         log.info("[start] LancamentoApplicationService - cadastraLancamento");
         Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Pega o Id do token
         pessoaRepository.buscaPessoaPorId(pessoa.getIdPessoa());
-        Lancamento lancamentoCriado = lancamentoRepository.salva(new Lancamento(lancamentoRequest, pessoa.getIdPessoa(),mes, ano));
+        Lancamento lancamentoCriado = new Lancamento(lancamentoRequest, pessoa.getIdPessoa(), mes, ano);
+
+        Lancamento lancamentoSalvo = null;
+
+        if (lancamentoRequest.getRecorrente()) {
+            IdRecorrencia recorrencia = recorrenciaInfraJPARespository.save(new IdRecorrencia());
+            lancamentoCriado.setIdRecorrencia(recorrencia.getId());
+            lancamentoSalvo = lancamentoRepository.salva(lancamentoCriado);
+
+            int proximoMes = mes.getId() + 1;
+
+            for (int i = proximoMes; i <= 12; i++) {
+                Lancamento lancamento = new Lancamento(lancamentoSalvo, i, recorrencia.getId());
+                lancamentoRepository.salva(lancamento);
+            }
+        }else {
+            lancamentoSalvo = lancamentoRepository.salva(lancamentoCriado);
+        }
         log.info("[finish] LancamentoApplicationService - cadastraLancamento");
-        return new LancamentoResponse(lancamentoCriado);
+        return new LancamentoResponse(lancamentoSalvo);
     }
 
     @Override
@@ -59,12 +79,6 @@ public class LancamentoApplicationService implements LancamentoService {
     public void deletaLancamento(UUID idLancamento) {
         log.info("[start] LancamentoApplicationService - deletaLancamento");
         Lancamento lancamento = lancamentoRepository.buscaLancamento(idLancamento);
-//        if(lancamento.getIdMeta() != 0){
-//            Meta meta = metaRepository.getMetaId(lancamento.getIdMeta());
-//            meta.removeTotalDeParcelas(lancamento.getPreco());
-//            meta.removeParcelaPaga();
-//            metaRepository.saveMeta(meta);
-//        }
         lancamentoRepository.deletaLancamento(idLancamento);
         log.info("[finish] LancamentoApplicationService - deletaLancamento");
     }
@@ -152,5 +166,13 @@ public class LancamentoApplicationService implements LancamentoService {
         meta.alteraParcelasTotais(lancamentos);
         metaRepository.saveMeta(meta);
         log.info("[finish] LancamentoApplicationService - cadastraLancamentoEmLote");
+    }
+
+    @Override
+    public void deletaAllLancamentoRecorrente(int idRecorrencia) {
+        log.info("[start] LancamentoApplicationService - deletaAllLancamentoRecorrente");
+        List<Lancamento> lancamentos = lancamentoRepository.buscaLancamentoIdRecorrencia(idRecorrencia);
+        lancamentoRepository.deleteAllLancamentosRecorrencia(lancamentos);
+        log.info("[finish] LancamentoApplicationService - deletaAllLancamentoRecorrente");
     }
 }

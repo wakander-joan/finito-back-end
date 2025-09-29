@@ -18,21 +18,20 @@ public enum CategoriaLancamento {
     LAZER               (6, "Lazer"),
     VESTUARIO           (7, "Vestuario"),
     SERVICOS            (8, "Servicos"),
-    PETS                (9, "Animais de Estimacao"),
-    IMPOSTOS            (10, "Impostos e Taxas"),
-    OUTRAS_DESPESAS     (11, "Outras Despesas" +
-            "as"),
+    PETS                (9, "Pets"),
+    IMPOSTOS            (10, "Impostos"),
+    OUTRAS_DESPESAS     (11, "Outras_Despesas"),
 
     // Receitas
     SALARIO             (12, "Salario"),
     FREELANCE           (13, "Freelance"),
-    ALUGUEL_RECEBIDO    (14, "Aluguel Recebido"),
+    ALUGUEL_RECEBIDO    (14, "Aluguel_Recebido"),
     INVESTIMENTOS       (15, "Investimentos"),
     REEMBOLSOS          (16, "Reembolsos"),
     PREMIOS             (17, "Premios"),
     VENDAS              (18, "Vendas"),
     AJUDAS              (19, "Ajudas"),
-    OUTRAS_RECEITAS     (20, "Outras Receitas"),
+    OUTRAS_RECEITAS     (20, "Outras_Receitas"),
     META               (21, "Meta");
 
     private final int id;

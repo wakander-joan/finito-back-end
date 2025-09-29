@@ -57,6 +57,13 @@ public class LancamentoController implements LancamentoAPI {
     }
 
     @Override
+    public void deletaAllLancamentoRecorrente(int idRecorrencia) {
+        log.info("[start] LancamentoController - deletaAllLancamentoRecorrente");
+        lancamentoService.deletaAllLancamentoRecorrente(idRecorrencia);
+        log.info("[finish] LancamentoController - deletaAllLancamentoRecorrente");
+    }
+
+    @Override
     public void editaLancamento(UUID idLancamento, LancamentoAlteracaoRequest lancamentoAlteracaoRequest) {
         log.info("[start] LancamentoController - editaLancamento");
         lancamentoService.editaLancamento(idLancamento, lancamentoAlteracaoRequest);

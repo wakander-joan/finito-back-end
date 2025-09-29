@@ -84,4 +84,19 @@ public class LancamentoInfraRepository implements LancamentoRepository {
         log.info("[finish] LancamentoInfraRepository - deleteAllLancamentosMeta");
     }
 
+    @Override
+    public List<Lancamento> buscaLancamentoIdRecorrencia(int idRecorrencia) {
+        log.info("[start] LancamentoInfraRepository - buscaLancamentoIdRecorrencia");
+        List<Lancamento> lancamentos = lancamentoJPARepository.findAllByIdRecorrencia(idRecorrencia);
+        log.info("[finish] LancamentoInfraRepository - buscaLancamentoIdRecorrencia");
+        return lancamentos;
+    }
+
+    @Override
+    public void deleteAllLancamentosRecorrencia(List<Lancamento> lancamentos) {
+        log.info("[start] LancamentoInfraRepository - deleteAllLancamentosRecorrencia");
+        lancamentoJPARepository.deleteAll(lancamentos);
+        log.info("[finish] LancamentoInfraRepository - deleteAllLancamentosRecorrencia");
+    }
+
 }

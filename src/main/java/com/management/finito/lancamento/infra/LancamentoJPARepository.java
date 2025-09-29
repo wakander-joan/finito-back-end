@@ -13,4 +13,5 @@ public interface LancamentoJPARepository  extends JpaRepository<Lancamento, UUID
     List<Lancamento> findAllByDataVencimentoAndTipo(LocalDate hoje, int i);
     void deleteAllByIdMeta(int id);
     List<Lancamento> findAllByIdMeta(int id);
+    List<Lancamento> findAllByIdRecorrencia(int idRecorrencia);
 }

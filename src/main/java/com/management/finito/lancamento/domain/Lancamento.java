@@ -14,6 +14,7 @@ import lombok.*;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ public class Lancamento {
     private int ano;
     private int categoriaLancamento;
     private int idMeta = 0;
+    private int idRecorrencia = 0;
 
     public Lancamento(LancamentoRequest lancamentoRequest, UUID idPessoa, MesDoLancamento mes, int ano) {
         this.idPessoa = idPessoa;
@@ -53,6 +55,34 @@ public class Lancamento {
         this.mesDoLancamento = mes.getId();
         this.ano = ano;
         this.categoriaLancamento = lancamentoRequest.getCategoriaLancamento().getId();
+    }
+
+
+    //Construtor de Recorrencia
+    public Lancamento(Lancamento lancamento, int mes, Integer idRecorrencia) {
+        this.idPessoa = lancamento.getIdPessoa();
+        this.descricao = lancamento.getDescricao();
+        this.preco = lancamento.getPreco();
+        this.status = lancamento.getStatus();
+        this.tipo = lancamento.getTipo();
+        this.ano = lancamento.getAno();
+        this.categoriaLancamento = lancamento.categoriaLancamento;
+        this.idMeta = lancamento.getIdMeta();
+        this.idRecorrencia = idRecorrencia;
+
+        this.mesDoLancamento = mes;
+
+        int ano = lancamento.getDataVencimento().getYear();
+        int dia = lancamento.getDataVencimento().getDayOfMonth();
+
+        YearMonth ym = YearMonth.of(ano, mes);
+        int diasNoMes = ym.lengthOfMonth();		// 30
+
+        if (dia > diasNoMes) {
+            this.dataVencimento = LocalDate.of(ano, mes, diasNoMes);
+        } else {
+            this.dataVencimento = LocalDate.of(ano, mes, dia);
+        }
     }
 
     public Lancamento(Lancamento lancamento) {
