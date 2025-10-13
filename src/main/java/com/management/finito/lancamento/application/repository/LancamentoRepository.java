@@ -18,4 +18,5 @@ public interface LancamentoRepository {
     void deleteAllLancamentosMeta(int id);
     List<Lancamento> buscaLancamentoIdRecorrencia(int idRecorrencia);
     void deleteAllLancamentosRecorrencia(List<Lancamento> lancamentos);
+    List<Lancamento> buscaLancamentosPorIds(List<UUID> ids);
 }

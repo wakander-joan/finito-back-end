@@ -125,7 +125,8 @@ public class LancamentoApplicationService implements LancamentoService {
     public void replicaLancamentos(ReplicaLancamentosRequest replicaLancamentosRequest) {
         log.info("[start] LancamentoApplicationService - replicaLancamentos");
         Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Lancamento> lancamentosOriginais = lancamentoRepository.buscaLancamentosPorMesEAno(MesDoLancamento.fromMes(replicaLancamentosRequest.getMesBase()), pessoa.getIdPessoa(),replicaLancamentosRequest.getAnoBase());
+
+        List<Lancamento> lancamentosOriginais = lancamentoRepository.buscaLancamentosPorIds(replicaLancamentosRequest.getIdsLancamentos());
 
 
         List<Lancamento> novosLancamentos = lancamentosOriginais.stream()

@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+import java.util.UUID;
+
 @ToString
 @Getter
 public class ReplicaLancamentosRequest {
@@ -15,4 +18,7 @@ public class ReplicaLancamentosRequest {
     private int mesDestino;
     @NotNull
     private int anoDestino;
+    @NotNull
+    private List<UUID> idsLancamentos;
+
 }
