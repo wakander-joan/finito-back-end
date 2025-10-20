@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,9 +58,9 @@ public class LancamentoController implements LancamentoAPI {
     }
 
     @Override
-    public void deletaAllLancamentoRecorrente(int idRecorrencia) {
+    public void deletaAllLancamentoRecorrente(int idRecorrencia, LocalDate dataVencimento) {
         log.info("[start] LancamentoController - deletaAllLancamentoRecorrente");
-        lancamentoService.deletaAllLancamentoRecorrente(idRecorrencia);
+        lancamentoService.deletaAllLancamentoRecorrente(idRecorrencia, dataVencimento);
         log.info("[finish] LancamentoController - deletaAllLancamentoRecorrente");
     }
 

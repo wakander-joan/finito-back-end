@@ -170,10 +170,13 @@ public class LancamentoApplicationService implements LancamentoService {
     }
 
     @Override
-    public void deletaAllLancamentoRecorrente(int idRecorrencia) {
+    public void deletaAllLancamentoRecorrente(int idRecorrencia, LocalDate data) {
         log.info("[start] LancamentoApplicationService - deletaAllLancamentoRecorrente");
         List<Lancamento> lancamentos = lancamentoRepository.buscaLancamentoIdRecorrencia(idRecorrencia);
-        lancamentoRepository.deleteAllLancamentosRecorrencia(lancamentos);
+        List<Lancamento> lancamentosParaExcluir = lancamentos.stream()
+                .filter(l -> !l.getDataVencimento().isBefore(data))
+                .toList();
+        lancamentoRepository.deleteAllLancamentosRecorrencia(lancamentosParaExcluir);
         log.info("[finish] LancamentoApplicationService - deletaAllLancamentoRecorrente");
     }
 }

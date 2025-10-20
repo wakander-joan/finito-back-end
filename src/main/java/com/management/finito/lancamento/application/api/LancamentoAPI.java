@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,9 +34,9 @@ public interface LancamentoAPI {
     @ResponseStatus(code = HttpStatus.OK)
     void deletaLancamento(@PathVariable UUID idLancamento);
 
-    @DeleteMapping("/deletaAllLancamentoRecorrente/{idRecorrencia}")
+    @DeleteMapping("/deletaAllLancamentoRecorrente/{idRecorrencia}/{dataVencimento}")
     @ResponseStatus(code = HttpStatus.OK)
-    void deletaAllLancamentoRecorrente (@PathVariable int idRecorrencia);
+    void deletaAllLancamentoRecorrente (@PathVariable int idRecorrencia,@PathVariable LocalDate dataVencimento);
 
     @PatchMapping(value = "/edita/{idLancamento}")
     @ResponseStatus(code = HttpStatus.OK)

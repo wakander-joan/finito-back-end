@@ -4,6 +4,7 @@ import com.management.finito.lancamento.application.api.*;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 import jakarta.validation.Valid;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,5 +18,5 @@ public interface LancamentoService {
     void mudaStatusParaPago(UUID idLancamento);
     void replicaLancamentos(ReplicaLancamentosRequest replicaLancamentosRequest);
     void cadastraLancamentoEmLote(List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, int idMeta);
-    void deletaAllLancamentoRecorrente(int idRecorrencia);
+    void deletaAllLancamentoRecorrente(int idRecorrencia, LocalDate dataVencimento);
 }
