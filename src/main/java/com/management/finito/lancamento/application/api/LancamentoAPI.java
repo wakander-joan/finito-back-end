@@ -22,7 +22,7 @@ public interface LancamentoAPI {
     @ResponseStatus(code = HttpStatus.CREATED)
     void cadastraLancamentoEmLote (@RequestBody List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, @PathVariable int idMeta);
 
-@GetMapping("/buscaLancamento/{idLancamento}")
+    @GetMapping("/buscaLancamento/{idLancamento}")
     @ResponseStatus(code = HttpStatus.OK)
     LancamentoDetalhadoResponse buscaLancamento (@PathVariable UUID idLancamento);
 
@@ -37,6 +37,10 @@ public interface LancamentoAPI {
     @DeleteMapping("/deletaAllLancamentoRecorrente/{idRecorrencia}/{dataVencimento}")
     @ResponseStatus(code = HttpStatus.OK)
     void deletaAllLancamentoRecorrente (@PathVariable int idRecorrencia,@PathVariable LocalDate dataVencimento);
+
+    @DeleteMapping("/deletaAllLancamentoParcelado/{idParcela}/{dataVencimento}")
+    @ResponseStatus(code = HttpStatus.OK)
+    void deletaAllLancamentoParcelado (@PathVariable int idParcela,@PathVariable LocalDate dataVencimento);
 
     @PatchMapping(value = "/edita/{idLancamento}")
     @ResponseStatus(code = HttpStatus.OK)

@@ -2,9 +2,11 @@ package com.management.finito.lancamento.application.service;
 
 import com.management.finito.lancamento.application.api.*;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
+import com.management.finito.lancamento.domain.IdParcela;
 import com.management.finito.lancamento.domain.IdRecorrencia;
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
+import com.management.finito.lancamento.infra.ParcelaInfraJPARespository;
 import com.management.finito.lancamento.infra.RecorrenciaInfraJPARespository;
 import com.management.finito.meta.application.repository.MetaRepository;
 import com.management.finito.meta.domain.Meta;
@@ -30,6 +32,7 @@ public class LancamentoApplicationService implements LancamentoService {
     private final PessoaRepository pessoaRepository;
     private final MetaRepository metaRepository;
     private final RecorrenciaInfraJPARespository recorrenciaInfraJPARespository;
+    private final ParcelaInfraJPARespository parcelaInfraJPARespository;
 
     @Override
     public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest, MesDoLancamento mes, int ano) {
@@ -51,7 +54,34 @@ public class LancamentoApplicationService implements LancamentoService {
                 Lancamento lancamento = new Lancamento(lancamentoSalvo, i, recorrencia.getId());
                 lancamentoRepository.salva(lancamento);
             }
-        }else {
+        }else if (lancamentoRequest.getNumeroParcelas() > 1) {
+            IdParcela idParcela = new IdParcela();
+            parcelaInfraJPARespository.save(idParcela);
+            lancamentoCriado.setIdParcela(idParcela.getId());
+
+            int totalParcelas = lancamentoRequest.getNumeroParcelas();
+
+            String descricao1 = lancamentoRequest.getDescricao() + " 1/" + totalParcelas ;
+            lancamentoCriado.setDescricao(descricao1);
+            lancamentoSalvo = lancamentoRepository.salva(lancamentoCriado);
+
+            int mesaDD = lancamentoSalvo.getMesDoLancamento();
+            int anoaDD = lancamentoSalvo.getAno();
+
+            for (int i = 1; i < totalParcelas; i++) {
+                mesaDD++;
+                if (mesaDD > 12) {
+                    mesaDD = 1;
+                    anoaDD++;
+                }
+
+                // int j = 1+i
+                String descricao = lancamentoRequest.getDescricao() +" "+ (1+i) + "/" + totalParcelas ;
+
+                Lancamento novo = new Lancamento(lancamentoSalvo, mesaDD, anoaDD, descricao);
+                lancamentoRepository.salva(novo);
+            }
+        } else {
             lancamentoSalvo = lancamentoRepository.salva(lancamentoCriado);
         }
         log.info("[finish] LancamentoApplicationService - cadastraLancamento");
@@ -178,5 +208,16 @@ public class LancamentoApplicationService implements LancamentoService {
                 .toList();
         lancamentoRepository.deleteAllLancamentosRecorrencia(lancamentosParaExcluir);
         log.info("[finish] LancamentoApplicationService - deletaAllLancamentoRecorrente");
+    }
+
+    @Override
+    public void deletaAllLancamentoParcelado(int idParcela, LocalDate dataVencimento) {
+        log.info("[start] LancamentoApplicationService - deletaAllLancamentoParcelado");
+        List<Lancamento> lancamentos = lancamentoRepository.buscaLancamentoIdParcela(idParcela);
+        List<Lancamento> lancamentosParaExcluir = lancamentos.stream()
+                .filter(l -> !l.getDataVencimento().isBefore(dataVencimento))
+                .toList();
+        lancamentoRepository.deleteAllLancamentosRecorrencia(lancamentosParaExcluir);
+        log.info("[finish] LancamentoApplicationService - deletaAllLancamentoParcelado");
     }
 }

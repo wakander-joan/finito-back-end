@@ -31,4 +31,5 @@ public class LancamentoRequest {
     @NotNull
     private CategoriaLancamento categoriaLancamento;
     private Boolean recorrente;
+    private Integer numeroParcelas;
 }

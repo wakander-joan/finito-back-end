@@ -107,4 +107,12 @@ public class LancamentoInfraRepository implements LancamentoRepository {
         return lancamentos;
     }
 
+    @Override
+    public List<Lancamento> buscaLancamentoIdParcela(int idParcela) {
+        log.info("[start] LancamentoInfraRepository - buscaLancamentoIdParcela");
+        List<Lancamento> lancamentos = lancamentoJPARepository.findAllByIdParcela(idParcela);
+        log.info("[finish] LancamentoInfraRepository - buscaLancamentoIdParcela");
+        return lancamentos;
+    }
+
 }

@@ -44,6 +44,7 @@ public class Lancamento {
     private int categoriaLancamento;
     private int idMeta = 0;
     private int idRecorrencia = 0;
+    private int idParcela = 0;
 
     public Lancamento(LancamentoRequest lancamentoRequest, UUID idPessoa, MesDoLancamento mes, int ano) {
         this.idPessoa = idPessoa;
@@ -85,9 +86,49 @@ public class Lancamento {
         }
     }
 
+    //Construtor de Parcelado
+    public Lancamento(Lancamento lancamento, int mes, int anoAdd, String descricao) {
+        this.idPessoa = lancamento.getIdPessoa();
+        this.descricao = descricao;
+        this.preco = lancamento.getPreco();
+        this.status = lancamento.getStatus();
+        this.tipo = lancamento.getTipo();
+        this.ano = anoAdd;
+        this.categoriaLancamento = lancamento.categoriaLancamento;
+        this.idMeta = lancamento.getIdMeta();
+        this.idParcela = lancamento.getIdParcela();
+
+        this.mesDoLancamento = mes;
+
+        int anoCalcula = lancamento.getDataVencimento().getYear();
+        int dia = lancamento.getDataVencimento().getDayOfMonth();
+
+        YearMonth ym = YearMonth.of(anoCalcula, mes);
+        int diasNoMes = ym.lengthOfMonth();		// 30
+
+        if (dia > diasNoMes) {
+            this.dataVencimento = LocalDate.of(ano, mes, diasNoMes);
+        } else {
+            this.dataVencimento = LocalDate.of(ano, mes, dia);
+        }
+    }
+
     public Lancamento(Lancamento lancamento) {
         this.idPessoa = lancamento.getIdPessoa();
         this.descricao = lancamento.getDescricao();
+        this.preco = lancamento.getPreco();
+        this.dataVencimento = lancamento.getDataVencimento();
+        this.status = lancamento.getStatus();
+        this.tipo = lancamento.getTipo();
+        this.mesDoLancamento = lancamento.getMesDoLancamento();
+        this.ano = lancamento.getAno();
+        this.categoriaLancamento = lancamento.categoriaLancamento;
+        this.idMeta = lancamento.getIdMeta();
+    }
+
+    public Lancamento(Lancamento lancamento, String descricao1) {
+        this.idPessoa = lancamento.getIdPessoa();
+        this.descricao = descricao1;
         this.preco = lancamento.getPreco();
         this.dataVencimento = lancamento.getDataVencimento();
         this.status = lancamento.getStatus();

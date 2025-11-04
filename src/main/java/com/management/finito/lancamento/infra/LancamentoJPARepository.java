@@ -15,4 +15,5 @@ public interface LancamentoJPARepository  extends JpaRepository<Lancamento, UUID
     List<Lancamento> findAllByIdMeta(int id);
     List<Lancamento> findAllByIdRecorrencia(int idRecorrencia);
     List<Lancamento> findByIdLancamentoIn(List<UUID> idLancamento);
+    List<Lancamento> findAllByIdParcela(int idParcela);
 }

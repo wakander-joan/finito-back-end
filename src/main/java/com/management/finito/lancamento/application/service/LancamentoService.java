@@ -19,4 +19,5 @@ public interface LancamentoService {
     void replicaLancamentos(ReplicaLancamentosRequest replicaLancamentosRequest);
     void cadastraLancamentoEmLote(List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, int idMeta);
     void deletaAllLancamentoRecorrente(int idRecorrencia, LocalDate dataVencimento);
+    void deletaAllLancamentoParcelado(int idParcela, LocalDate dataVencimento);
 }

@@ -65,6 +65,13 @@ public class LancamentoController implements LancamentoAPI {
     }
 
     @Override
+    public void deletaAllLancamentoParcelado(int idParcela, LocalDate dataVencimento) {
+        log.info("[start] LancamentoController - deletaAllLancamentoParcelado");
+        lancamentoService.deletaAllLancamentoParcelado(idParcela, dataVencimento);
+        log.info("[finish] LancamentoController - deletaAllLancamentoParcelado");
+    }
+
+    @Override
     public void editaLancamento(UUID idLancamento, LancamentoAlteracaoRequest lancamentoAlteracaoRequest) {
         log.info("[start] LancamentoController - editaLancamento");
         lancamentoService.editaLancamento(idLancamento, lancamentoAlteracaoRequest);
