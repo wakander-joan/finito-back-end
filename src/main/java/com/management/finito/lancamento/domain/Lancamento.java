@@ -45,6 +45,7 @@ public class Lancamento {
     private int idMeta = 0;
     private int idRecorrencia = 0;
     private int idParcela = 0;
+    private String anotacao;
 
     public Lancamento(LancamentoRequest lancamentoRequest, UUID idPessoa, MesDoLancamento mes, int ano) {
         this.idPessoa = idPessoa;
@@ -56,6 +57,7 @@ public class Lancamento {
         this.mesDoLancamento = mes.getId();
         this.ano = ano;
         this.categoriaLancamento = lancamentoRequest.getCategoriaLancamento().getId();
+        this.anotacao = lancamentoRequest.getAnotacao();
     }
 
 

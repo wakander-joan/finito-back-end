@@ -32,4 +32,5 @@ public class LancamentoRequest {
     private CategoriaLancamento categoriaLancamento;
     private Boolean recorrente;
     private Integer numeroParcelas;
+    private String anotacao;
 }
