@@ -117,6 +117,15 @@ public class LancamentoApplicationService implements LancamentoService {
     public void editaLancamento(UUID idLancamento, LancamentoAlteracaoRequest lancamentoAlteracaoRequest) {
         log.info("[start] LancamentoApplicationService - editaLancamento");
         Lancamento lancamento = lancamentoRepository.buscaLancamento(idLancamento);
+
+        if (lancamentoAlteracaoRequest.getAnotacao() == null || lancamentoAlteracaoRequest.getAnotacao().isEmpty()) {
+            if (lancamento.getAnotacao() == null || lancamento.getAnotacao().isEmpty()){
+                lancamentoAlteracaoRequest.setAnotacao("");
+            }else {
+                lancamentoAlteracaoRequest.setAnotacao(lancamento.getAnotacao());
+            }
+        }
+
         lancamento.atualiza(lancamentoAlteracaoRequest);
         //adicionar mudança no total das metas
         lancamentoRepository.salva(lancamento);
@@ -175,6 +184,7 @@ public class LancamentoApplicationService implements LancamentoService {
 
                     LocalDate novaDataVencimento = LocalDate.of(anoDestino, mesDestino, novoDia);
                     novo.setDataVencimento(novaDataVencimento);
+                    novo.setAnotacao(l.getAnotacao());
                     return novo;
                 })
                 .collect(Collectors.toList());

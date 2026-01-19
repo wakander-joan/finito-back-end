@@ -165,6 +165,7 @@ public class Lancamento {
         this.dataVencimento = lancamentoAlteracaoRequest.getDataVencimento();
         this.tipo = lancamentoAlteracaoRequest.getTipo().getId();
         this.categoriaLancamento = lancamentoAlteracaoRequest.getCategoriaLancamento().getId();
+        this.anotacao =  lancamentoAlteracaoRequest.getAnotacao();
         log.info("[finish] Lancamento - atualiza");
     }
 

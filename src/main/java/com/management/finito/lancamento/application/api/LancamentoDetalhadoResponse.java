@@ -27,6 +27,7 @@ public class LancamentoDetalhadoResponse {
     private int idRecorrencia;
     private int idMeta;
     private int idParcela;
+    private String anotacao;
 
     public LancamentoDetalhadoResponse(Lancamento lancamento) {
         this.idLancamento = lancamento.getIdLancamento();
@@ -40,6 +41,7 @@ public class LancamentoDetalhadoResponse {
         this.idRecorrencia = lancamento.getIdRecorrencia();
         this.idMeta = lancamento.getIdMeta();
         this.idParcela = lancamento.getIdParcela();
+        this.anotacao = lancamento.getAnotacao();
     }
 
     public static List<LancamentoDetalhadoResponse> converte(List<Lancamento> lancamentos) {
