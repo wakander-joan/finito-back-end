@@ -8,8 +8,6 @@ import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
 import com.management.finito.lancamento.infra.ParcelaInfraJPARespository;
 import com.management.finito.lancamento.infra.RecorrenciaInfraJPARespository;
-import com.management.finito.meta.application.repository.MetaRepository;
-import com.management.finito.meta.domain.Meta;
 import com.management.finito.pessoa.application.repository.PessoaRepository;
 import com.management.finito.pessoa.domain.Pessoa;
 import jakarta.validation.Valid;
@@ -30,7 +28,6 @@ import java.util.stream.Collectors;
 public class LancamentoApplicationService implements LancamentoService {
     private final LancamentoRepository lancamentoRepository;
     private final PessoaRepository pessoaRepository;
-    private final MetaRepository metaRepository;
     private final RecorrenciaInfraJPARespository recorrenciaInfraJPARespository;
     private final ParcelaInfraJPARespository parcelaInfraJPARespository;
 
@@ -137,11 +134,11 @@ public class LancamentoApplicationService implements LancamentoService {
         log.info("[start] LancamentoApplicationService - mudaStatusParaPendente");
         Lancamento lancamento = lancamentoRepository.buscaLancamento(idLancamento);
         lancamento.mudaStatusParaPendente();
-        if(lancamento.getIdMeta() != 0){
-            Meta meta = metaRepository.getMetaId(lancamento.getIdMeta());
-            meta.removeParcelaPaga();
-            metaRepository.saveMeta(meta);
-        }
+//        if(lancamento.getIdMeta() != 0){
+//            Meta meta = metaRepository.getMetaId(lancamento.getIdMeta());
+//            meta.removeParcelaPaga();
+//            metaRepository.saveMeta(meta);
+//        }
         lancamentoRepository.salva(lancamento);
         log.info("[finish] LancamentoApplicationService - mudaStatusParaPendente");
     }
@@ -151,11 +148,11 @@ public class LancamentoApplicationService implements LancamentoService {
         log.info("[start] LancamentoApplicationService - mudaStatusParaPago");
         Lancamento lancamento = lancamentoRepository.buscaLancamento(idLancamento);
         lancamento.mudaStatusParaPago();
-        if(lancamento.getIdMeta() != 0){
-            Meta meta = metaRepository.getMetaId(lancamento.getIdMeta());
-            meta.addParcelaPaga();
-            metaRepository.saveMeta(meta);
-        }
+//        if(lancamento.getIdMeta() != 0){
+//            Meta meta = metaRepository.getMetaId(lancamento.getIdMeta());
+//            meta.addParcelaPaga();
+//            metaRepository.saveMeta(meta);
+//        }
         lancamentoRepository.salva(lancamento);
         log.info("[finish] LancamentoApplicationService - mudaStatusParaPago");
     }
@@ -197,15 +194,15 @@ public class LancamentoApplicationService implements LancamentoService {
         log.info("[start] LancamentoApplicationService - cadastraLancamentoEmLote");
         Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Pega o Id do token
         pessoaRepository.buscaPessoaPorId(pessoa.getIdPessoa());
-        Meta meta = metaRepository.getMetaId(idMeta);
+//        Meta meta = metaRepository.getMetaId(idMeta);
 
         //Cria os lancamentos em Lote e salva
         List<Lancamento> lancamentos = Lancamento.criaLancamentosEmLote(lancamentosEmLoteRequest, idMeta, pessoa.getIdPessoa());
         lancamentoRepository.savaTodosLancamentos(lancamentos);
 
         //Altera e Salva ParcelasTotais da Meta
-        meta.alteraParcelasTotais(lancamentos);
-        metaRepository.saveMeta(meta);
+//        meta.alteraParcelasTotais(lancamentos);
+//        metaRepository.saveMeta(meta);
         log.info("[finish] LancamentoApplicationService - cadastraLancamentoEmLote");
     }
 
