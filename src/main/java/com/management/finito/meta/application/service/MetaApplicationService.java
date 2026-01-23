@@ -1,6 +1,6 @@
 package com.management.finito.meta.application.service;
 
-import com.management.finito.lancamento.application.api.LancamentoDetalhadoResponse;
+import com.management.finito.meta.application.api.MetaDetalhadaResponse;
 import com.management.finito.meta.application.api.MetaRequest;
 import com.management.finito.meta.application.api.MetaResponse;
 import com.management.finito.meta.application.repository.EtapaRepository;
@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -49,5 +49,25 @@ public class MetaApplicationService implements MetaService {
 
         log.info("[finish] MetaApplicationService - cadastraMeta");
         return new MetaResponse(metaSalva);
+    }
+
+    @Override
+    public List<MetaDetalhadaResponse> buscaMeta() {
+        log.info("[start] MetaApplicationService - buscaMeta");
+        //Valida e pega o Id do Usuario
+        Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Pega o Id do token
+        pessoaRepository.buscaPessoaPorId(pessoa.getIdPessoa());
+        //Busca as metas
+        List<Meta> metasBuscada = metaRepository.buscaMetas(pessoa.getIdPessoa());
+
+        List<MetaDetalhadaResponse> listaDeMetasDetalhadas = new ArrayList<>();
+        //Cria response
+        metasBuscada.forEach(c -> {
+            ArrayList<Etapa> etapasBuscadas = etapaRepository.buscaEtapas(c.getIdMeta());
+            MetaDetalhadaResponse metaCriada = new MetaDetalhadaResponse(c, etapasBuscadas);
+            listaDeMetasDetalhadas.add(metaCriada);
+        });
+        log.info("[finish] MetaApplicationService - buscaMeta");
+        return listaDeMetasDetalhadas;
     }
 }
