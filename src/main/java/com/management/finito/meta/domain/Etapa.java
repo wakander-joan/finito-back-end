@@ -37,6 +37,10 @@ public class Etapa {
         this.descricao = c.getDescricao();
         this.anotacao = c.getAnotacao();
     }
+
+    public void alteraStatusEtapa(StatusEtapa status) {
+        this.status = status;
+    }
 }
 
 

@@ -190,23 +190,6 @@ public class LancamentoApplicationService implements LancamentoService {
     }
 
     @Override
-    public void cadastraLancamentoEmLote(List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, int idMeta) {
-        log.info("[start] LancamentoApplicationService - cadastraLancamentoEmLote");
-        Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Pega o Id do token
-        pessoaRepository.buscaPessoaPorId(pessoa.getIdPessoa());
-//        Meta meta = metaRepository.getMetaId(idMeta);
-
-        //Cria os lancamentos em Lote e salva
-        List<Lancamento> lancamentos = Lancamento.criaLancamentosEmLote(lancamentosEmLoteRequest, idMeta, pessoa.getIdPessoa());
-        lancamentoRepository.savaTodosLancamentos(lancamentos);
-
-        //Altera e Salva ParcelasTotais da Meta
-//        meta.alteraParcelasTotais(lancamentos);
-//        metaRepository.saveMeta(meta);
-        log.info("[finish] LancamentoApplicationService - cadastraLancamentoEmLote");
-    }
-
-    @Override
     public void deletaAllLancamentoRecorrente(int idRecorrencia, LocalDate data) {
         log.info("[start] LancamentoApplicationService - deletaAllLancamentoRecorrente");
         List<Lancamento> lancamentos = lancamentoRepository.buscaLancamentoIdRecorrencia(idRecorrencia);

@@ -7,5 +7,5 @@ public enum StatusEtapa {
     PENDENTE,
     EMANDAMENTO,
     IMPEDIDA,
-    CONCLUSAO
+    CONCLUIDA
 }

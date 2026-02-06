@@ -38,4 +38,15 @@ public class Meta {
         this.dataInicial = metaRequest.getDataInicial();
         this.dataAlvo = metaRequest.getDataAlvo();
     }
+
+    public void addEtapaConcluida() {
+        this.totalEtapasConcluidas = totalEtapasConcluidas + 1;
+        log.info("[start] Meta - addEtapaConcluida");
+        log.info("Adiciona 1 Etapa de CONCLUIDO!!");
+    }
+
+    public void removeEtapaConcluida() {
+        this.totalEtapasConcluidas = totalEtapasConcluidas - 1;
+        log.info("Removendo 1 Etapa de CONCLUIDO!!");
+    }
 }

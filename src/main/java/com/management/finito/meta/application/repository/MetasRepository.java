@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface MetasRepository {
     Meta salvaMeta(Meta metaCriada);
     List<Meta> buscaMetas(UUID idUsuario);
+    Meta buscaMeta(UUID idMeta);
+    void deletaMeta(UUID idMeta);
 }

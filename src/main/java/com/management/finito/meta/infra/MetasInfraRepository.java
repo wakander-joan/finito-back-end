@@ -32,4 +32,20 @@ public class MetasInfraRepository implements MetasRepository {
         log.info("[finish] MetasInfraRepository - buscaMeta");
         return metas;
     }
+
+    @Override
+    public Meta buscaMeta(UUID idMeta) {
+        log.info("[start] MetasInfraRepository - buscaMeta");
+        Meta metaBuscada = metaJPARepository.findById(idMeta)
+                .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Meta não encontrada"));
+        log.info("[finish] MetasInfraRepository - buscaMeta");
+        return metaBuscada;
+    }
+
+    @Override
+    public void deletaMeta(UUID idMeta) {
+        log.info("[start] MetasInfraRepository - deletaMeta");
+        metaJPARepository.deleteById(idMeta);
+        log.info("[finish] MetasInfraRepository - deletaMeta");
+    }
 }

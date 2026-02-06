@@ -28,13 +28,6 @@ public class LancamentoController implements LancamentoAPI {
     }
 
     @Override
-    public void cadastraLancamentoEmLote(List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, int idMeta) {
-        log.info("[start] LancamentoController - cadastraLancamentoEmLote");
-        lancamentoService.cadastraLancamentoEmLote(lancamentosEmLoteRequest, idMeta);
-        log.info("[finish] LancamentoController - cadastraLancamentoEmLote");
-    }
-
-    @Override
     public LancamentoDetalhadoResponse buscaLancamento(UUID idLancamento) {
         log.info("[start] LancamentoController - buscaLancamento");
         LancamentoDetalhadoResponse lancamento = lancamentoService.buscaLancamento(idLancamento);

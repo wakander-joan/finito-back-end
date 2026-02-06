@@ -1,6 +1,7 @@
 package com.management.finito.meta.application.api;
 
 import com.management.finito.meta.application.service.MetaService;
+import com.management.finito.meta.domain.StatusEtapa;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,9 +29,24 @@ public class MetaController implements MetaAPI {
     @Override
     public List<MetaDetalhadaResponse> buscaMetas() {
         log.info("[start] MetaController - buscaMeta");
-        List<MetaDetalhadaResponse> metaDetasdetalhada = metaService.buscaMeta();
+        List<MetaDetalhadaResponse> metaDetasdetalhada = metaService.buscaMetas();
         log.info("[finish] MetaController - buscaMeta");
         return metaDetasdetalhada;
+    }
+
+    @Override
+    public void deletaMeta(UUID idMeta) {
+        log.info("[start] MetaController - deletaMeta");
+        metaService.deletaMeta(idMeta);
+        log.info("[finish] MetaController - deletaMeta");
+    }
+
+    @Override
+    public void alteraStatusEtapa(UUID idEtapa, String status) {
+        log.info("[start] MetaController - alteraStatusEtapa");
+        log.info("status={}", status);
+        metaService.alteraStatusEtapa(idEtapa, status);
+        log.info("[finish] MetaController - alteraStatusEtapa");
     }
 
 }

@@ -8,4 +8,7 @@ import java.util.UUID;
 public interface EtapaRepository {
     void salvaEtapas(ArrayList<Etapa> etapasParaSalvar);
     ArrayList<Etapa> buscaEtapas(UUID idMeta);
+    void deletaEtapa(UUID idEtapa);
+    Etapa buscaEtapa(UUID idEtapa);
+    void salvaEtapa(Etapa etapaBuscada);
 }

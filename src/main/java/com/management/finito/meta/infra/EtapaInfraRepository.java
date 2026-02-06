@@ -31,4 +31,27 @@ public class EtapaInfraRepository implements EtapaRepository {
         log.info("[finish] EtapaInfraRepository - buscaEtapas");
         return etapas;
     }
+
+    @Override
+    public void deletaEtapa(UUID idEtapa) {
+        log.info("[start] EtapaInfraRepository - deletaEtapa");
+        etapaJPARepository.deleteById(idEtapa);
+        log.info("[finish] EtapaInfraRepository - deletaEtapa");
+    }
+
+    @Override
+    public Etapa buscaEtapa(UUID idEtapa) {
+        log.info("[start] EtapaInfraRepository - buscaEtapa");
+        Etapa etapaBuscada = etapaJPARepository.findById(idEtapa)
+                .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Etapa não encontrada"));
+        log.info("[finish] EtapaInfraRepository - buscaEtapa");
+        return etapaBuscada;
+    }
+
+    @Override
+    public void salvaEtapa(Etapa etapaBuscada) {
+        log.info("[start] EtapaInfraRepository - salvaEtapa");
+        etapaJPARepository.save(etapaBuscada);
+        log.info("[finish] EtapaInfraRepository - salvaEtapa");
+    }
 }

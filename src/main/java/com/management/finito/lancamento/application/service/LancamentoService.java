@@ -17,7 +17,6 @@ public interface LancamentoService {
     void mudaStatusParaPendente(UUID idLancamento);
     void mudaStatusParaPago(UUID idLancamento);
     void replicaLancamentos(ReplicaLancamentosRequest replicaLancamentosRequest);
-    void cadastraLancamentoEmLote(List<@Valid LancamentoEmLoteRequest> lancamentosEmLoteRequest, int idMeta);
     void deletaAllLancamentoRecorrente(int idRecorrencia, LocalDate dataVencimento);
     void deletaAllLancamentoParcelado(int idParcela, LocalDate dataVencimento);
 }
