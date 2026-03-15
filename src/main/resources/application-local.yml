@@ -14,3 +14,6 @@ spring:
 
   jpa:
     show-sql: true
+
+cors:
+  allowed-origins: http://localhost:5173
