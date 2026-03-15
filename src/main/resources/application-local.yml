@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/finito
+    username: postgres
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      poolName: SpringBootJPAHikariCP
+      minimumIdle: 5
+      maximumPoolSize: 20
+      connectionTimeout: 30000
+      idleTimeout: 30000
+      maxLifetime: 2000000
+
+  jpa:
+    show-sql: true
