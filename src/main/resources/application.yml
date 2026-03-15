@@ -9,15 +9,17 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    port: 587
+    port: 465
     username: ${MAIL_USERNAME:joanreis.dev@gmail.com}
     password: ${MAIL_PASSWORD:xamm vgbn yxfs blgr}
     properties:
       mail:
         smtp:
           auth: true
-          starttls:
+          ssl:
             enable: true
+          starttls:
+            enable: false
 
   jpa:
     hibernate:
