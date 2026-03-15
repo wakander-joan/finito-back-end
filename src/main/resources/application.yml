@@ -8,7 +8,7 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE:local}
 
   resend:
-    api-key: ${re_RdEydRwN_J13RjA4ZLoJfjzugGtpp2k5Y}
+    api-key: ${RESEND_API_KEY}
 
   jpa:
     hibernate:
