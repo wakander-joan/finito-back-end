@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      poolName: SpringBootJPAHikariCP
+      minimumIdle: 2
+      maximumPoolSize: 10
+      connectionTimeout: 30000
+      idleTimeout: 30000
+      maxLifetime: 2000000
+
+  jpa:
+    show-sql: false

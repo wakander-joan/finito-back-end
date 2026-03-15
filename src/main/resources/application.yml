@@ -1,25 +1,17 @@
 server:
+  port: ${PORT:8080}
   servlet:
     context-path: /finito/api
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/finito
-    username: postgres
-    password: 12345678
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      poolName: SpringBootJPAHikariCP
-      minimumIdle: 20
-      maximumPoolSize: 200
-      connectionTimeout: 30000
-      idleTimeout: 30000
-      maxLifetime: 2000000
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
   mail:
     host: smtp.gmail.com
     port: 587
-    username: joanreis.dev@gmail.com
-    password: xamm vgbn yxfs blgr
+    username: ${MAIL_USERNAME:joanreis.dev@gmail.com}
+    password: ${MAIL_PASSWORD:xamm vgbn yxfs blgr}
     properties:
       mail:
         smtp:
@@ -30,7 +22,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
         default_schema: lancamento
