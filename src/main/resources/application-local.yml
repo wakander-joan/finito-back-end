@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/finito
+    url: jdbc:postgresql://interchange.proxy.rlwy.net:56942/railway
     username: postgres
-    password: 12345678
+    password: mpGjcxSBVKiyHjyPvRsKPDNSGRpzGHnU
     driver-class-name: org.postgresql.Driver
     hikari:
       poolName: SpringBootJPAHikariCP

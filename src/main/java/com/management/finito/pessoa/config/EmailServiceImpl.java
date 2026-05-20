@@ -1,20 +1,26 @@
 package com.management.finito.pessoa.config;
 
-import com.resend.Resend;
-import com.resend.services.emails.model.CreateEmailOptions;
-import com.resend.services.emails.model.CreateEmailResponse;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 @Log4j2
 public class EmailServiceImpl implements EmailService {
 
-    @Value("${resend.api-key}")
-    private String apiKey;
+    private final JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String remetente;
 
     private static final String HTML_TEMPLATE = """
         <html>
@@ -46,18 +52,13 @@ public class EmailServiceImpl implements EmailService {
     public void enviarEmail(String para, String assunto, String mensagem) {
         log.info("[start] EmailServiceImpl - enviarEmail");
         try {
-            Resend resend = new Resend(apiKey);
-
-            CreateEmailOptions params = CreateEmailOptions.builder()
-                    .from("Finito <onboarding@resend.dev>")
-                    .to(para)
-                    .subject(assunto)
-                    .html(HTML_TEMPLATE)
-                    .build();
-
-            CreateEmailResponse response = resend.emails().send(params);
-            log.info("[finish] EmailServiceImpl - enviarEmail - id: {}", response.getId());
-
+            SimpleMailMessage email = new SimpleMailMessage();
+            email.setFrom("Finito <" + remetente + ">");
+            email.setTo(para);
+            email.setSubject(assunto);
+            email.setText(HTML_TEMPLATE);
+            mailSender.send(email);
+            log.info("[finish] EmailServiceImpl - enviarEmail");
         } catch (Exception e) {
             log.error("[erro] EmailServiceImpl - enviarEmail: {}", e.getMessage(), e);
             throw new RuntimeException("Erro ao enviar e-mail", e);
@@ -68,19 +69,15 @@ public class EmailServiceImpl implements EmailService {
     public void enviarEmailHtml(@Email @NotNull String para, String assunto, String html) {
         log.info("[start] EmailServiceImpl - enviarEmailHtml");
         try {
-            Resend resend = new Resend(apiKey);
-
-            CreateEmailOptions params = CreateEmailOptions.builder()
-                    .from("Finito <onboarding@resend.dev>")
-                    .to(para)
-                    .subject(assunto)
-                    .html(html)
-                    .build();
-
-            resend.emails().send(params);
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setFrom("Finito <" + remetente + ">");
+            helper.setTo(para);
+            helper.setSubject(assunto);
+            helper.setText(html, true);
+            mailSender.send(message);
             log.info("[finish] EmailServiceImpl - enviarEmailHtml");
-
-        } catch (Exception e) {
+        } catch (MessagingException e) {
             log.error("[erro] EmailServiceImpl - enviarEmailHtml: {}", e.getMessage(), e);
         }
     }
