@@ -32,7 +32,16 @@ public enum CategoriaLancamento {
     VENDAS              (18, "Vendas"),
     AJUDAS              (19, "Ajudas"),
     OUTRAS_RECEITAS     (20, "Outras_Receitas"),
-    META               (21, "Meta");
+    META               (21, "Meta"),
+
+    // Despesas — modelo resumido: cada categoria abaixo (+ LAZER, id 6) ja e um
+    // grupo da tela de Graficos. As despesas antigas (ids 1-11) viram legado:
+    // somem do formulario do front, mas continuam validas p/ dados ja gravados.
+    GASTO_FIXO          (22, "Gasto_Fixo"),
+    GASTO_PONTUAL       (23, "Gasto_Pontual"),
+    RESERVA             (24, "Reserva"),
+    APORTE              (25, "Aporte"),
+    INESPERADO          (26, "Inesperado");
 
     private final int id;
     private final String descricao;
