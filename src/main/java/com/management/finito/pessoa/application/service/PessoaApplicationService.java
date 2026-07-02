@@ -32,10 +32,13 @@ public class PessoaApplicationService implements PessoaService {
 		log.info("[inicia] PessoaApplicationService - criaPessoa");
 		validaEmailCadastrado(pessoaRequeste.getEmail());
 		Pessoa pessoa = pessoaRepository.salva(new Pessoa(pessoaRequeste));
-		String assunto = "Cadastro realizado com sucesso!";
-		String mensagem = String.format("Olá %s,\n\nSeu cadastro foi realizado com sucesso. Seja bem-vindo(a) a FINITO!", pessoa.getNomePessoa());
-		emailService.enviarEmail(pessoa.getEmail(), assunto, mensagem);
-		log.info("Email enviado com sucesso para, %s", pessoa.getEmail());
+		// E-mail de boas-vindas NAO pode derrubar o cadastro: falha so e logada.
+		try {
+			emailService.enviarBoasVindas(pessoa.getEmail(), pessoa.getNomePessoa());
+			log.info("Email de boas-vindas enviado para {}", pessoa.getEmail());
+		} catch (Exception e) {
+			log.error("[erro] Falha ao enviar e-mail de boas-vindas para {} (cadastro segue normal): {}", pessoa.getEmail(), e.getMessage());
+		}
 		log.info("[finaliza] PessoaApplicationService - criaPessoa");
 		return PessoaResponse.builder().idPessoa(pessoa.getIdPessoa()).build();
 	}
