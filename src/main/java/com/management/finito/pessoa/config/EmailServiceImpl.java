@@ -20,7 +20,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
+    @Value("${finito.mail.from}")
     private String remetente;
 
     private static final String HTML_TEMPLATE = """
