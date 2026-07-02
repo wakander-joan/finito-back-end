@@ -18,4 +18,5 @@ public class LancamentoAlteracaoRequest {
     private TipoLancamento tipo;
     private CategoriaLancamento categoriaLancamento;
     private String anotacao;
+    private String icone;
 }

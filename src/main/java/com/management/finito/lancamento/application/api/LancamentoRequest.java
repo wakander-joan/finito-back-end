@@ -33,4 +33,5 @@ public class LancamentoRequest {
     private Boolean recorrente;
     private Integer numeroParcelas;
     private String anotacao;
+    private String icone;
 }

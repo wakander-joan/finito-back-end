@@ -46,6 +46,7 @@ public class Lancamento {
     private int idRecorrencia = 0;
     private int idParcela = 0;
     private String anotacao;
+    private String icone;
 
     public Lancamento(LancamentoRequest lancamentoRequest, UUID idPessoa, MesDoLancamento mes, int ano) {
         this.idPessoa = idPessoa;
@@ -58,6 +59,7 @@ public class Lancamento {
         this.ano = ano;
         this.categoriaLancamento = lancamentoRequest.getCategoriaLancamento().getId();
         this.anotacao = lancamentoRequest.getAnotacao();
+        this.icone = lancamentoRequest.getIcone();
     }
 
 
@@ -73,6 +75,7 @@ public class Lancamento {
         this.idMeta = lancamento.getIdMeta();
         this.idRecorrencia = idRecorrencia;
         this.anotacao = lancamento.getAnotacao();
+        this.icone = lancamento.getIcone();
 
         this.mesDoLancamento = mes;
 
@@ -101,6 +104,7 @@ public class Lancamento {
         this.idMeta = lancamento.getIdMeta();
         this.idParcela = lancamento.getIdParcela();
         this.anotacao = lancamento.getAnotacao();
+        this.icone = lancamento.getIcone();
 
         this.mesDoLancamento = mes;
 
@@ -129,6 +133,7 @@ public class Lancamento {
         this.categoriaLancamento = lancamento.categoriaLancamento;
         this.idMeta = lancamento.getIdMeta();
         this.anotacao = lancamento.getAnotacao();
+        this.icone = lancamento.getIcone();
     }
 
     public Lancamento(Lancamento lancamento, String descricao1) {
@@ -169,6 +174,7 @@ public class Lancamento {
         this.tipo = lancamentoAlteracaoRequest.getTipo().getId();
         this.categoriaLancamento = lancamentoAlteracaoRequest.getCategoriaLancamento().getId();
         this.anotacao =  lancamentoAlteracaoRequest.getAnotacao();
+        this.icone = lancamentoAlteracaoRequest.getIcone();
         log.info("[finish] Lancamento - atualiza");
     }
 
