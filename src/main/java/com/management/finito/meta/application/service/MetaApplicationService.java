@@ -139,4 +139,13 @@ public class MetaApplicationService implements MetaService {
         });
         log.info("[finish] MetaApplicationService - atualizaValoresEtapas");
     }
+
+    @Override
+    public void atualizaImagemMeta(UUID idMeta, String imagem) {
+        log.info("[start] MetaApplicationService - atualizaImagemMeta");
+        Meta meta = metaRepository.buscaMeta(idMeta);
+        meta.atualizaImagem(imagem);
+        metaRepository.salvaMeta(meta);
+        log.info("[finish] MetaApplicationService - atualizaImagemMeta");
+    }
 }

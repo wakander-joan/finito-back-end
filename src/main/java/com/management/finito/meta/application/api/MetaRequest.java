@@ -16,6 +16,7 @@ public class MetaRequest {
     private String descricao;
     @NotBlank
     private String anotacao;
+    private String imagem;
     @NotNull
     private LocalDate dataInicial;
     @NotNull

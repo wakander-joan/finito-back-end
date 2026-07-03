@@ -26,6 +26,8 @@ public class Meta {
     private UUID idUsuario;
     private String descricao;
     private String anotacao;
+    @Column(columnDefinition = "text")
+    private String imagem;
     private int totalEtapas = 0;
     private int totalEtapasConcluidas = 0;
     private LocalDate dataInicial;
@@ -35,8 +37,13 @@ public class Meta {
         this.idUsuario = idPessoa;
         this.descricao = metaRequest.getDescricao();
         this.anotacao = metaRequest.getAnotacao();
+        this.imagem = metaRequest.getImagem();
         this.dataInicial = metaRequest.getDataInicial();
         this.dataAlvo = metaRequest.getDataAlvo();
+    }
+
+    public void atualizaImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public void addEtapaConcluida() {
