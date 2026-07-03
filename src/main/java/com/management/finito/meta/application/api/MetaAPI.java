@@ -27,4 +27,8 @@ public interface MetaAPI {
     @PatchMapping("/alteraStatusEtapa/{idEtapa}/{status}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     void alteraStatusEtapa(@PathVariable UUID idEtapa, @PathVariable String status);
+
+    @PatchMapping("/atualizaValoresEtapas")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    void atualizaValoresEtapas(@RequestBody List<EtapaValorRequest> valores);
 }

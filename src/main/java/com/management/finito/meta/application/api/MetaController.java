@@ -49,4 +49,11 @@ public class MetaController implements MetaAPI {
         log.info("[finish] MetaController - alteraStatusEtapa");
     }
 
+    @Override
+    public void atualizaValoresEtapas(List<EtapaValorRequest> valores) {
+        log.info("[start] MetaController - atualizaValoresEtapas ({} etapas)", valores != null ? valores.size() : 0);
+        metaService.atualizaValoresEtapas(valores);
+        log.info("[finish] MetaController - atualizaValoresEtapas");
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.management.finito.meta.application.service;
 
+import com.management.finito.meta.application.api.EtapaValorRequest;
 import com.management.finito.meta.application.api.MetaDetalhadaResponse;
 import com.management.finito.meta.application.api.MetaRequest;
 import com.management.finito.meta.application.api.MetaResponse;
@@ -13,4 +14,5 @@ public interface MetaService {
     List<MetaDetalhadaResponse> buscaMetas();
     void deletaMeta(UUID idMeta);
     void alteraStatusEtapa(UUID idEtapa, String status);
+    void atualizaValoresEtapas(List<EtapaValorRequest> valores);
 }

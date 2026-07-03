@@ -1,6 +1,7 @@
 package com.management.finito.meta.application.service;
 
 import com.management.finito.handler.APIException;
+import com.management.finito.meta.application.api.EtapaValorRequest;
 import com.management.finito.meta.application.api.MetaDetalhadaResponse;
 import com.management.finito.meta.application.api.MetaRequest;
 import com.management.finito.meta.application.api.MetaResponse;
@@ -124,5 +125,18 @@ public class MetaApplicationService implements MetaService {
         etapaRepository.salvaEtapa(etapaBuscada);
         metaRepository.salvaMeta(meta);
         log.info("[finish] MetaApplicationService - alteraStatusEtapa");
+    }
+
+    @Override
+    public void atualizaValoresEtapas(List<EtapaValorRequest> valores) {
+        log.info("[start] MetaApplicationService - atualizaValoresEtapas");
+        if (valores == null) return;
+        valores.forEach(v -> {
+            Etapa etapa = etapaRepository.buscaEtapa(v.getIdEtapa());
+            etapa.setAnotacao(v.getAnotacao());
+            etapaRepository.salvaEtapa(etapa);
+            log.info("Etapa {} -> valor {}", v.getIdEtapa(), v.getAnotacao());
+        });
+        log.info("[finish] MetaApplicationService - atualizaValoresEtapas");
     }
 }
