@@ -28,6 +28,10 @@ public class Meta {
     private String anotacao;
     @Column(columnDefinition = "text")
     private String imagem;
+    // Valor-alvo FIXO da meta (soma planejada das parcelas). Fica imutavel mesmo que
+    // o usuario pague uma parcela a mais; assim o "Pago" pode ultrapassar e mostramos o
+    // excedente. Nullable: metas antigas nao tem e recebem o alvo sob demanda.
+    private Double valorAlvo;
     private int totalEtapas = 0;
     private int totalEtapasConcluidas = 0;
     private LocalDate dataInicial;
@@ -38,12 +42,17 @@ public class Meta {
         this.descricao = metaRequest.getDescricao();
         this.anotacao = metaRequest.getAnotacao();
         this.imagem = metaRequest.getImagem();
+        this.valorAlvo = metaRequest.getValorAlvo();
         this.dataInicial = metaRequest.getDataInicial();
         this.dataAlvo = metaRequest.getDataAlvo();
     }
 
     public void atualizaImagem(String imagem) {
         this.imagem = imagem;
+    }
+
+    public void atualizaValorAlvo(Double valorAlvo) {
+        this.valorAlvo = valorAlvo;
     }
 
     public void addEtapaConcluida() {

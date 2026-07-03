@@ -16,4 +16,5 @@ public interface MetaService {
     void alteraStatusEtapa(UUID idEtapa, String status);
     void atualizaValoresEtapas(List<EtapaValorRequest> valores);
     void atualizaImagemMeta(UUID idMeta, String imagem);
+    void atualizaValorAlvoMeta(UUID idMeta, Double valorAlvo);
 }

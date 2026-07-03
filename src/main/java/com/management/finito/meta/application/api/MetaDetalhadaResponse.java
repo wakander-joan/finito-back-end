@@ -16,6 +16,7 @@ public class MetaDetalhadaResponse {
     private String descricao;
     private String anotacao;
     private String imagem;
+    private Double valorAlvo;
     private int totalEtapas;
     private int totalEtapasConcluidas;
     private LocalDate dataInicial;
@@ -27,6 +28,7 @@ public class MetaDetalhadaResponse {
         this.descricao = metaBuscada.getDescricao();
         this.anotacao = metaBuscada.getAnotacao();
         this.imagem = metaBuscada.getImagem();
+        this.valorAlvo = metaBuscada.getValorAlvo();
         this.totalEtapas = metaBuscada.getTotalEtapas();
         this.totalEtapasConcluidas = metaBuscada.getTotalEtapasConcluidas();
         this.dataInicial = metaBuscada.getDataInicial();

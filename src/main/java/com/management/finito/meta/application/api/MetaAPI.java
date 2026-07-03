@@ -35,4 +35,8 @@ public interface MetaAPI {
     @PatchMapping("/{idMeta}/imagem")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     void atualizaImagemMeta(@PathVariable UUID idMeta, @RequestBody ImagemMetaRequest request);
+
+    @PatchMapping("/{idMeta}/valorAlvo")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    void atualizaValorAlvoMeta(@PathVariable UUID idMeta, @RequestBody ValorAlvoMetaRequest request);
 }

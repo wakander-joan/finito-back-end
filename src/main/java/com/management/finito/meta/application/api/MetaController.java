@@ -63,4 +63,11 @@ public class MetaController implements MetaAPI {
         log.info("[finish] MetaController - atualizaImagemMeta");
     }
 
+    @Override
+    public void atualizaValorAlvoMeta(UUID idMeta, ValorAlvoMetaRequest request) {
+        log.info("[start] MetaController - atualizaValorAlvoMeta | idMeta={} | valorAlvo={}", idMeta, request.getValorAlvo());
+        metaService.atualizaValorAlvoMeta(idMeta, request.getValorAlvo());
+        log.info("[finish] MetaController - atualizaValorAlvoMeta");
+    }
+
 }
