@@ -4,6 +4,7 @@ import com.management.finito.handler.APIException;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.MesDoLancamento;
+import com.management.finito.lancamento.domain.enums.SatatusLancamento;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -60,10 +61,11 @@ public class LancamentoInfraRepository implements LancamentoRepository {
     }
 
     @Override
-    public List<Lancamento> findByDataVencimento(LocalDate hoje) {
-        log.info("[start] LancamentoInfraRepository - findByDataVencimento");
-        List<Lancamento> lancamentos = lancamentoJPARepository.findAllByDataVencimentoAndTipo(hoje, 2);
-        log.info("[finish] LancamentoInfraRepository - findByDataVencimento");
+    public List<Lancamento> buscaVencimentosPendentesNaData(LocalDate data) {
+        log.info("[start] LancamentoInfraRepository - buscaVencimentosPendentesNaData");
+        // Receita e Despesa (sem filtro de tipo), apenas os PENDENTES — nao lembra do que ja foi pago/recebido.
+        List<Lancamento> lancamentos = lancamentoJPARepository.findAllByDataVencimentoAndStatus(data, SatatusLancamento.PENDENTE.getId());
+        log.info("[finish] LancamentoInfraRepository - buscaVencimentosPendentesNaData");
         return lancamentos;
     }
 

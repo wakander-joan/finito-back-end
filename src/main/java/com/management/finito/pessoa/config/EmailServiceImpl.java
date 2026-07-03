@@ -87,7 +87,7 @@ public class EmailServiceImpl implements EmailService {
                 </td></tr>
                 <tr><td style="padding:18px 36px 6px;">
                   <h1 style="margin:0 0 10px;color:#ffffff;font-size:22px;font-weight:800;">{{SAUDACAO}} &#127881;</h1>
-                  <p style="margin:0;color:#aab3c5;font-size:15px;line-height:1.65;">Seu cadastro no <span style="color:#ff6b81;font-weight:700;">Finito</span> foi realizado com sucesso. Agora e so comecar: lance receitas e despesas, defina metas, monte sua reserva e acompanhe tudo em graficos.</p>
+                  <p style="margin:0;color:#aab3c5;font-size:15px;line-height:1.65;">Seu cadastro no <span style="color:#ff6b81;font-weight:700;">Finito</span> foi realizado com sucesso! Agora é só começar: lance receitas e despesas, defina metas, monte sua reserva e acompanhe tudo em gráficos.</p>
                 </td></tr>
                 <tr><td align="center" style="padding:26px 36px 6px;">
                   <a href="https://finito-production.up.railway.app" style="display:inline-block;background-color:#e11d48;background-image:linear-gradient(135deg,#ff3b5c,#e11d48);color:#ffffff;text-decoration:none;font-size:15px;font-weight:700;padding:14px 30px;border-radius:999px;">Acessar o Finito &#8594;</a>
@@ -96,7 +96,7 @@ public class EmailServiceImpl implements EmailService {
                   <p style="margin:0;color:#6b7488;font-size:13px;">&#128184; O seu organizador financeiro</p>
                 </td></tr>
                 <tr><td style="padding:18px 36px 34px;border-top:1px solid rgba(255,255,255,0.07);">
-                  <p style="margin:14px 0 0;color:#6b7488;font-size:12px;text-align:center;">Esta e uma mensagem automatica, nao e necessario responder.</p>
+                  <p style="margin:14px 0 0;color:#6b7488;font-size:12px;text-align:center;">Esta é uma mensagem automática, não é necessário responder.</p>
                   <p style="margin:6px 0 0;color:#ff6b81;font-size:12px;font-weight:700;text-align:center;">Equipe Finito</p>
                 </td></tr>
               </table>

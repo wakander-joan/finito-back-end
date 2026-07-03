@@ -13,7 +13,7 @@ public interface LancamentoRepository {
     List<Lancamento> buscaLancamentosPorMesEAno(MesDoLancamento mes, UUID idPessoa, int ano);
     void deletaLancamento(UUID idLancamento);
     void deletaTodosLancamento(UUID idPessoa);
-    List<Lancamento> findByDataVencimento(LocalDate hoje);
+    List<Lancamento> buscaVencimentosPendentesNaData(LocalDate data);
     void savaTodosLancamentos(List<Lancamento> novosLancamentos);
     void deleteAllLancamentosMeta(int id);
     List<Lancamento> buscaLancamentoIdRecorrencia(int idRecorrencia);
