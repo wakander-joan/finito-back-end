@@ -1,27 +1,35 @@
 package com.management.finito.pessoa.config;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender mailSender;
-
     @Value("${finito.mail.from}")
     private String remetente;
+
+    // Envio via API HTTP do Brevo (porta 443) — o Railway bloqueia SMTP (25/465/587/2525).
+    @Value("${brevo.api-key:}")
+    private String brevoApiKey;
+    private final HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String HTML_TEMPLATE = """
         <html>
@@ -53,12 +61,8 @@ public class EmailServiceImpl implements EmailService {
     public void enviarEmail(String para, String assunto, String mensagem) {
         log.info("[start] EmailServiceImpl - enviarEmail");
         try {
-            SimpleMailMessage email = new SimpleMailMessage();
-            email.setFrom("Finito <" + remetente + ">");
-            email.setTo(para);
-            email.setSubject(assunto);
-            email.setText(HTML_TEMPLATE);
-            mailSender.send(email);
+            // Via API HTTP do Brevo (porta 443) — o Railway bloqueia SMTP.
+            enviarViaBrevoApi(para, assunto, HTML_TEMPLATE);
             log.info("[finish] EmailServiceImpl - enviarEmail");
         } catch (Exception e) {
             log.error("[erro] EmailServiceImpl - enviarEmail: {}", e.getMessage(), e);
@@ -108,23 +112,49 @@ public class EmailServiceImpl implements EmailService {
         String primeiro = (nome == null || nome.isBlank()) ? "" : nome.trim().split("\\s+")[0];
         String saudacao = primeiro.isEmpty() ? "Bem-vindo(a)!" : "Bem-vindo(a), " + primeiro + "!";
         String html = BOAS_VINDAS_HTML.replace("{{SAUDACAO}}", saudacao);
-        enviarEmailHtml(para, "Bem-vindo(a) ao Finito!", html);
+        try {
+            enviarViaBrevoApi(para, "Bem-vindo(a) ao Finito!", html);
+        } catch (Exception e) {
+            log.error("[erro] enviarBoasVindas (Brevo API) para {}: {}", para, e.getMessage(), e);
+        }
+    }
+
+    // Envia via API HTTP do Brevo (https://api.brevo.com/v3/smtp/email) — porta 443, imune ao bloqueio de SMTP.
+    private void enviarViaBrevoApi(String para, String assunto, String html) throws Exception {
+        if (brevoApiKey == null || brevoApiKey.isBlank()) {
+            log.error("[Brevo API] BREVO_API_KEY nao configurada — e-mail para {} nao enviado.", para);
+            return;
+        }
+        Map<String, Object> body = Map.of(
+            "sender", Map.of("name", "Finito", "email", remetente),
+            "to", List.of(Map.of("email", para)),
+            "subject", assunto,
+            "htmlContent", html
+        );
+        String json = objectMapper.writeValueAsString(body);
+        HttpRequest req = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
+            .header("api-key", brevoApiKey)
+            .header("Content-Type", "application/json")
+            .header("accept", "application/json")
+            .timeout(Duration.ofSeconds(15))
+            .POST(HttpRequest.BodyPublishers.ofString(json))
+            .build();
+        HttpResponse<String> resp = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
+        if (resp.statusCode() >= 300) {
+            throw new RuntimeException("Brevo API HTTP " + resp.statusCode() + ": " + resp.body());
+        }
+        log.info("[Brevo API] e-mail enfileirado para {} (HTTP {})", para, resp.statusCode());
     }
 
     @Override
     public void enviarEmailHtml(@Email @NotNull String para, String assunto, String html) {
         log.info("[start] EmailServiceImpl - enviarEmailHtml");
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setFrom("Finito <" + remetente + ">");
-            helper.setTo(para);
-            helper.setSubject(assunto);
-            helper.setText(html, true);
-            mailSender.send(message);
+            // Via API HTTP do Brevo (porta 443) — o Railway bloqueia SMTP (usado tambem nos lembretes de vencimento).
+            enviarViaBrevoApi(para, assunto, html);
             log.info("[finish] EmailServiceImpl - enviarEmailHtml");
         } catch (Exception e) {
-            // Captura tambem MailSendException (runtime) do Spring, nao so MessagingException.
             log.error("[erro] EmailServiceImpl - enviarEmailHtml: {}", e.getMessage(), e);
         }
     }
