@@ -27,7 +27,7 @@ public class NotificacaoVencimentoScheduler {
     private final PessoaRepository pessoaRepository;
     private final EmailService emailService;
 
-    @Scheduled(cron = "0 0 8 * * *") // Executa todo dia às 08:00 da manhã
+    @Scheduled(cron = "0 0 8 * * *", zone = "America/Sao_Paulo") // Todo dia às 08:00 no horário de Brasília
     public void notificarVencimentos() {
         log.info("[start] NotificacaoVencimentoScheduler - notificarVencimentos");
 
