@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/usuario/criaUsuario").permitAll()
                         .requestMatchers("/webhooks/**").permitAll() // Asaas: verificado por token no header
+                        .requestMatchers("/admin/**").permitAll() // Admin API: verificada por X-Admin-Token
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // libera preflight
                         .anyRequest().authenticated()
                 )

@@ -2,10 +2,12 @@ package com.management.finito.assinatura.infra;
 
 import com.management.finito.assinatura.application.repository.AssinaturaRepository;
 import com.management.finito.assinatura.domain.Assinatura;
+import com.management.finito.assinatura.domain.StatusAssinatura;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,5 +38,10 @@ public class AssinaturaInfraRepository implements AssinaturaRepository {
     @Override
     public Optional<Assinatura> buscaPorCustomerAsaas(String asaasCustomerId) {
         return jpa.findByAsaasCustomerId(asaasCustomerId);
+    }
+
+    @Override
+    public long contaPremiumAtivas() {
+        return jpa.countByStatusAndVigenteAteGreaterThanEqual(StatusAssinatura.ATIVA, LocalDate.now());
     }
 }

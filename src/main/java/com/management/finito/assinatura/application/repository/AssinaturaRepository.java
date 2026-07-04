@@ -10,4 +10,5 @@ public interface AssinaturaRepository {
     Optional<Assinatura> buscaPorUsuario(UUID idUsuario);
     Optional<Assinatura> buscaPorAssinaturaAsaas(String asaasSubscriptionId);
     Optional<Assinatura> buscaPorCustomerAsaas(String asaasCustomerId);
+    long contaPremiumAtivas();
 }

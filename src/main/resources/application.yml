@@ -38,3 +38,7 @@ premium:
   valor: ${PREMIUM_VALOR:9.90}
   limite-metas: ${PREMIUM_LIMITE_METAS:2}
   limite-lancamentos-mes: ${PREMIUM_LIMITE_LANCAMENTOS_MES:40}
+
+# Token da Admin API (consumida pelo painel Ordersys Admin, header X-Admin-Token).
+admin:
+  token: ${ADMIN_API_TOKEN:}
