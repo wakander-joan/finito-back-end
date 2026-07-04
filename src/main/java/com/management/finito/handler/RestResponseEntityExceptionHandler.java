@@ -1,5 +1,8 @@
 package com.management.finito.handler;
 
+import com.management.finito.admin.AdminTelemetryService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +16,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 @Log4j2
 public class RestResponseEntityExceptionHandler {
+	private final AdminTelemetryService telemetry;
+
 	@ExceptionHandler(APIException.class)
-	public ResponseEntity<ErrorApiResponse> handlerGenericException(APIException ex) {
+	public ResponseEntity<ErrorApiResponse> handlerGenericException(APIException ex, HttpServletRequest req) {
+		if (ex.getStatusException() != null && ex.getStatusException().is5xxServerError()) {
+			telemetry.registraErro(req.getMethod(), req.getRequestURI(), ex.getStatusException().value(), ex.getMessage());
+		}
 		return ex.buildErrorResponseEntity();
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorApiResponse> handlerGenericException(Exception ex) {
+	public ResponseEntity<ErrorApiResponse> handlerGenericException(Exception ex, HttpServletRequest req) {
 		log.error("Exception: ", ex);
+		telemetry.registraErro(req.getMethod(), req.getRequestURI(), 500, ex.getClass().getSimpleName() + ": " + ex.getMessage());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(ErrorApiResponse.builder().description("INTERNAL SERVER ERROR!")
 						.message("POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!").build());

@@ -1,5 +1,6 @@
 package com.management.finito.config;
 
+import com.management.finito.admin.AdminTelemetryService;
 import com.management.finito.pessoa.application.repository.PessoaRepository;
 import com.management.finito.pessoa.domain.Pessoa;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class AuthController {
     private final PessoaRepository pessoaRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AdminTelemetryService telemetry;
 
     @Autowired
     private JwtService jwtService;
@@ -34,6 +36,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha inválida");
         }
         String token = jwtService.gerarToken(pessoa.getIdPessoa(), pessoa.getEmail());
+        telemetry.registraAcesso();
         return ResponseEntity.ok(Map.of("token", token));
     }
 }

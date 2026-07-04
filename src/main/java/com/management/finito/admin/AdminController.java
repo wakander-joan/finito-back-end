@@ -30,6 +30,7 @@ public class AdminController {
     private final PessoaRepository pessoaRepository;
     private final AssinaturaRepository assinaturaRepository;
     private final AdminService adminService;
+    private final AdminTelemetryService telemetry;
 
     @Value("${admin.token:}")
     private String adminToken;
@@ -50,8 +51,23 @@ public class AdminController {
                 "site", "Finito",
                 "temPremium", true,
                 "usuarios", usuarios,
-                "premium", premium
+                "premium", premium,
+                "acessosHoje", telemetry.acessosHoje()
         );
+    }
+
+    /** Série de acessos (logins) dos últimos dias, para o gráfico do painel. */
+    @GetMapping("/acessos")
+    public List<AcessoDiario> acessos(@RequestHeader(value = "X-Admin-Token", required = false) String token) {
+        autoriza(token);
+        return telemetry.ultimosAcessos(14);
+    }
+
+    /** Últimos erros da API, para o painel. */
+    @GetMapping("/errors")
+    public List<ErroLog> errors(@RequestHeader(value = "X-Admin-Token", required = false) String token) {
+        autoriza(token);
+        return telemetry.ultimosErros();
     }
 
     /** Concede Premium MANUAL a um usuário (sem cobrança), pelo e-mail. */
