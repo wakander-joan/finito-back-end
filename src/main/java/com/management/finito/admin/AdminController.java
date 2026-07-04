@@ -2,6 +2,8 @@ package com.management.finito.admin;
 
 import com.management.finito.assinatura.application.repository.AssinaturaRepository;
 import com.management.finito.assinatura.domain.Assinatura;
+import com.management.finito.feedback.Feedback;
+import com.management.finito.feedback.FeedbackJPARepository;
 import com.management.finito.handler.APIException;
 import com.management.finito.pessoa.application.repository.PessoaRepository;
 import com.management.finito.pessoa.domain.Pessoa;
@@ -31,6 +33,7 @@ public class AdminController {
     private final AssinaturaRepository assinaturaRepository;
     private final AdminService adminService;
     private final AdminTelemetryService telemetry;
+    private final FeedbackJPARepository feedbackRepo;
 
     @Value("${admin.token:}")
     private String adminToken;
@@ -151,5 +154,28 @@ public class AdminController {
         }
         adminService.apagaUsuarioCompleto(email);
         return Map.of("ok", true, "email", email, "apagado", true);
+    }
+
+    /** Caixa de entrada: reclamações, sugestões e contatos. */
+    @GetMapping("/feedbacks")
+    public List<Feedback> feedbacks(@RequestHeader(value = "X-Admin-Token", required = false) String token) {
+        autoriza(token);
+        return feedbackRepo.findTop200ByOrderByQuandoDesc();
+    }
+
+    @PostMapping("/feedbacks/lido")
+    public Map<String, Object> marcaLido(@RequestHeader(value = "X-Admin-Token", required = false) String token,
+                                         @RequestBody Map<String, String> body) {
+        autoriza(token);
+        feedbackRepo.findById(UUID.fromString(body.get("id"))).ifPresent(f -> { f.setLido(true); feedbackRepo.save(f); });
+        return Map.of("ok", true);
+    }
+
+    @PostMapping("/feedbacks/apagar")
+    public Map<String, Object> apagaFeedback(@RequestHeader(value = "X-Admin-Token", required = false) String token,
+                                             @RequestBody Map<String, String> body) {
+        autoriza(token);
+        feedbackRepo.deleteById(UUID.fromString(body.get("id")));
+        return Map.of("ok", true);
     }
 }

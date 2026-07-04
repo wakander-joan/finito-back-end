@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login", "/usuario/criaUsuario").permitAll()
                         .requestMatchers("/webhooks/**").permitAll() // Asaas: verificado por token no header
                         .requestMatchers("/admin/**").permitAll() // Admin API: verificada por X-Admin-Token
+                        .requestMatchers(HttpMethod.POST, "/feedback").permitAll() // envio de feedback (público)
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // libera preflight
                         .anyRequest().authenticated()
                 )
