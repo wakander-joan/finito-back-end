@@ -83,12 +83,19 @@ public class AsaasClient {
             try {
                 return (String) post("/subscriptions", comCallback).get("id");
             } catch (APIException e) {
-                String msg = e.getMessage();
-                if (msg == null || !msg.contains("Cadastre um site")) throw e;
-                log.warn("Asaas sem site/domínio configurado — criando assinatura sem callback (sem auto-redirect).");
+                if (!ehErroDeCallback(e.getMessage())) throw e;
+                log.warn("Asaas recusou o callback (site/domínio) — criando assinatura SEM callback (sem auto-redirect).");
             }
         }
         return (String) post("/subscriptions", body).get("id");
+    }
+
+    /** Erros do Asaas relacionados ao callback/site/domínio -> criar sem callback. */
+    private boolean ehErroDeCallback(String mensagem) {
+        if (mensagem == null) return false;
+        String m = mensagem.toLowerCase();
+        return m.contains("cadastre um site") || m.contains("domínio") || m.contains("dominio")
+                || m.contains("informações") || m.contains("informacoes") || m.contains("successurl") || m.contains("callback");
     }
 
     /** URL da página de fatura da 1ª cobrança (com pequeno retry, pois pode demorar a ser gerada). */
