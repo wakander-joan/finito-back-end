@@ -12,7 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Admin API padronizada consumida pelo painel central (Ordersys Admin).
@@ -69,5 +73,53 @@ public class AdminController {
         assinaturaRepository.salva(assinatura);
         log.info("[admin] Premium MANUAL concedido a {}", email);
         return Map.of("ok", true, "email", email, "premium", true);
+    }
+
+    /** Lista os usuários (nome, e-mail, se é premium e se foi manual). */
+    @GetMapping("/usuarios")
+    public List<Map<String, Object>> usuarios(@RequestHeader(value = "X-Admin-Token", required = false) String token) {
+        autoriza(token);
+        Map<UUID, Assinatura> porUsuario = new HashMap<>();
+        for (Assinatura a : assinaturaRepository.todas()) porUsuario.put(a.getIdUsuario(), a);
+        return pessoaRepository.buscaTodasPessoas().stream().map(p -> {
+            Assinatura a = porUsuario.get(p.getIdPessoa());
+            boolean premium = a != null && a.isPremium();
+            boolean manual = premium && "PREMIUM_MANUAL".equals(a.getPlano());
+            Map<String, Object> m = new HashMap<>();
+            m.put("nome", p.getNomePessoa());
+            m.put("email", p.getEmail());
+            m.put("premium", premium);
+            m.put("manual", manual);
+            m.put("plano", premium ? a.getPlano() : null);
+            return m;
+        }).collect(Collectors.toList());
+    }
+
+    /** Remove o Premium concedido MANUALMENTE (não mexe em assinatura paga do Asaas). */
+    @PostMapping("/premium/remover")
+    public Map<String, Object> removePremium(@RequestHeader(value = "X-Admin-Token", required = false) String token,
+                                             @RequestBody Map<String, String> body) {
+        autoriza(token);
+        String email = body != null ? body.get("email") : null;
+        if (email == null || email.isBlank()) {
+            throw APIException.build(HttpStatus.BAD_REQUEST, "Informe o email.");
+        }
+        Pessoa pessoa = pessoaRepository.buscaEmail(email.trim());
+        if (pessoa == null) {
+            throw APIException.build(HttpStatus.NOT_FOUND, "Usuário não encontrado: " + email);
+        }
+        Assinatura a = assinaturaRepository.buscaPorUsuario(pessoa.getIdPessoa()).orElse(null);
+        if (a == null || !a.isPremium()) {
+            throw APIException.build(HttpStatus.BAD_REQUEST, "Este usuário não é Premium.");
+        }
+        if (!"PREMIUM_MANUAL".equals(a.getPlano())) {
+            throw APIException.build(HttpStatus.CONFLICT,
+                    "Este Premium é uma assinatura paga (Asaas). Cancele pelo Asaas, não aqui.");
+        }
+        a.cancelar();
+        a.setVigenteAte(LocalDate.now().minusDays(1));
+        assinaturaRepository.salva(a);
+        log.info("[admin] Premium MANUAL removido de {}", email);
+        return Map.of("ok", true, "email", email, "premium", false);
     }
 }

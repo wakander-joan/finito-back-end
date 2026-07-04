@@ -2,6 +2,7 @@ package com.management.finito.assinatura.application.repository;
 
 import com.management.finito.assinatura.domain.Assinatura;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,4 +12,5 @@ public interface AssinaturaRepository {
     Optional<Assinatura> buscaPorAssinaturaAsaas(String asaasSubscriptionId);
     Optional<Assinatura> buscaPorCustomerAsaas(String asaasCustomerId);
     long contaPremiumAtivas();
+    List<Assinatura> todas();
 }
