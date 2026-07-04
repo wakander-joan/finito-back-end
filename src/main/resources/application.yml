@@ -26,3 +26,13 @@ finito:
 # API HTTP do Brevo (porta 443) — usada para enviar e-mail, pois o Railway bloqueia SMTP.
 brevo:
   api-key: ${BREVO_API_KEY:}
+
+# Pagamento Premium via Asaas. Sandbox por padrão; em produção defina
+# ASAAS_BASE_URL=https://api.asaas.com/v3 + ASAAS_API_KEY + ASAAS_WEBHOOK_TOKEN.
+asaas:
+  base-url: ${ASAAS_BASE_URL:https://sandbox.asaas.com/api/v3}
+  api-key: ${ASAAS_API_KEY:}
+  webhook-token: ${ASAAS_WEBHOOK_TOKEN:}
+
+premium:
+  valor: ${PREMIUM_VALOR:9.90}

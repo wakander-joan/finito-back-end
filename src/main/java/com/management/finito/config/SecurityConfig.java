@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/usuario/criaUsuario").permitAll()
+                        .requestMatchers("/webhooks/**").permitAll() // Asaas: verificado por token no header
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // libera preflight
                         .anyRequest().authenticated()
                 )
