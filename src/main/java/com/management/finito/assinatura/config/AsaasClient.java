@@ -71,14 +71,24 @@ public class AsaasClient {
         body.put("nextDueDate", LocalDate.now().toString());
         body.put("cycle", "MONTHLY");
         body.put("description", descricao);
+
+        // Callback (redireciona de volta ao app após o pagamento) só é aceito pelo Asaas
+        // se a conta tiver um site cadastrado. Se não tiver, cria a assinatura sem callback.
         if (successUrl != null && !successUrl.isBlank()) {
+            Map<String, Object> comCallback = new HashMap<>(body);
             Map<String, Object> callback = new HashMap<>();
             callback.put("successUrl", successUrl);
             callback.put("autoRedirect", true);
-            body.put("callback", callback);
+            comCallback.put("callback", callback);
+            try {
+                return (String) post("/subscriptions", comCallback).get("id");
+            } catch (APIException e) {
+                String msg = e.getMessage();
+                if (msg == null || !msg.contains("Cadastre um site")) throw e;
+                log.warn("Asaas sem site/domínio configurado — criando assinatura sem callback (sem auto-redirect).");
+            }
         }
-        Map<?, ?> resp = post("/subscriptions", body);
-        return (String) resp.get("id");
+        return (String) post("/subscriptions", body).get("id");
     }
 
     /** URL da página de fatura da 1ª cobrança (com pequeno retry, pois pode demorar a ser gerada). */
