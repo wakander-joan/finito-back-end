@@ -73,6 +73,17 @@ public class AdminController {
         return telemetry.ultimosErros();
     }
 
+    /** Consulta se um e-mail é Premium (usado pelo TaskFlow no desconto cross-produto). */
+    @GetMapping("/premium-por-email")
+    public Map<String, Object> premiumPorEmail(@RequestHeader(value = "X-Admin-Token", required = false) String token,
+                                               @RequestParam String email) {
+        autoriza(token);
+        Pessoa pessoa = pessoaRepository.buscaEmail(email == null ? null : email.trim());
+        boolean premium = pessoa != null
+                && assinaturaRepository.buscaPorUsuario(pessoa.getIdPessoa()).map(Assinatura::isPremium).orElse(false);
+        return Map.of("email", email == null ? "" : email, "premium", premium);
+    }
+
     /** Concede Premium MANUAL a um usuário (sem cobrança), pelo e-mail. */
     @PostMapping("/premium")
     public Map<String, Object> tornaPremium(@RequestHeader(value = "X-Admin-Token", required = false) String token,
