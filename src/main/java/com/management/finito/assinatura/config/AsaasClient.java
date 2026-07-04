@@ -1,10 +1,14 @@
 package com.management.finito.assinatura.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management.finito.handler.APIException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,18 +20,27 @@ import java.util.Map;
 
 /**
  * Cliente HTTP do Asaas (https://docs.asaas.com). Autentica pelo header access_token.
- * Sandbox por padrão; em produção defina ASAAS_BASE_URL=https://api.asaas.com/v3 e a ASAAS_API_KEY.
+ * Sandbox por padrão; em produção defina ASAAS_BASE_URL=https://api.asaas.com/v3 + ASAAS_API_KEY.
+ * Erros do Asaas são propagados com a mensagem original (para aparecer no front e nos logs).
  */
 @Component
 @Log4j2
 public class AsaasClient {
-    private final RestTemplate rest = new RestTemplate();
+    private final RestTemplate rest;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Value("${asaas.base-url:https://sandbox.asaas.com/api/v3}")
     private String baseUrl;
 
     @Value("${asaas.api-key:}")
     private String apiKey;
+
+    public AsaasClient() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(15000);
+        factory.setReadTimeout(20000);
+        this.rest = new RestTemplate(factory);
+    }
 
     private HttpHeaders headers() {
         HttpHeaders h = new HttpHeaders();
@@ -68,14 +81,16 @@ public class AsaasClient {
         return (String) resp.get("id");
     }
 
-    /** URL da página de fatura da 1ª cobrança da assinatura (onde o cliente paga). */
-    @SuppressWarnings("unchecked")
+    /** URL da página de fatura da 1ª cobrança (com pequeno retry, pois pode demorar a ser gerada). */
     public String primeiraFaturaUrl(String subscriptionId) {
-        Map<?, ?> resp = get("/subscriptions/" + subscriptionId + "/payments");
-        Object data = resp.get("data");
-        if (data instanceof List<?> list && !list.isEmpty() && list.get(0) instanceof Map<?, ?> primeira) {
-            Object url = primeira.get("invoiceUrl");
-            return url != null ? url.toString() : null;
+        for (int tentativa = 1; tentativa <= 3; tentativa++) {
+            Map<?, ?> resp = get("/subscriptions/" + subscriptionId + "/payments");
+            Object data = resp.get("data");
+            if (data instanceof List<?> list && !list.isEmpty() && list.get(0) instanceof Map<?, ?> primeira) {
+                Object url = primeira.get("invoiceUrl");
+                if (url != null && !url.toString().isBlank()) return url.toString();
+            }
+            dorme(800);
         }
         return null;
     }
@@ -86,9 +101,13 @@ public class AsaasClient {
             ResponseEntity<Map> r = rest.exchange(baseUrl + path, HttpMethod.POST,
                     new HttpEntity<>(body, headers()), Map.class);
             return r.getBody() != null ? r.getBody() : Map.of();
+        } catch (HttpStatusCodeException e) {
+            String corpo = e.getResponseBodyAsString();
+            log.error("Asaas POST {} -> HTTP {} | {}", path, e.getStatusCode(), corpo);
+            throw APIException.build(HttpStatus.BAD_GATEWAY, "Asaas: " + extrairMensagem(corpo));
         } catch (RestClientException e) {
             log.error("Asaas POST {} falhou: {}", path, e.getMessage());
-            throw APIException.build(HttpStatus.BAD_GATEWAY, "Falha ao falar com o provedor de pagamento.");
+            throw APIException.build(HttpStatus.BAD_GATEWAY, "Não foi possível conectar ao provedor de pagamento.");
         }
     }
 
@@ -98,9 +117,37 @@ public class AsaasClient {
             ResponseEntity<Map> r = rest.exchange(baseUrl + path, HttpMethod.GET,
                     new HttpEntity<>(headers()), Map.class);
             return r.getBody() != null ? r.getBody() : Map.of();
+        } catch (HttpStatusCodeException e) {
+            String corpo = e.getResponseBodyAsString();
+            log.error("Asaas GET {} -> HTTP {} | {}", path, e.getStatusCode(), corpo);
+            throw APIException.build(HttpStatus.BAD_GATEWAY, "Asaas: " + extrairMensagem(corpo));
         } catch (RestClientException e) {
             log.error("Asaas GET {} falhou: {}", path, e.getMessage());
-            throw APIException.build(HttpStatus.BAD_GATEWAY, "Falha ao falar com o provedor de pagamento.");
+            throw APIException.build(HttpStatus.BAD_GATEWAY, "Não foi possível conectar ao provedor de pagamento.");
+        }
+    }
+
+    /** Extrai a descrição do erro do JSON do Asaas ({"errors":[{"description":"..."}]}). */
+    private String extrairMensagem(String corpo) {
+        if (corpo == null || corpo.isBlank()) return "erro desconhecido do provedor.";
+        try {
+            JsonNode node = mapper.readTree(corpo);
+            JsonNode errors = node.get("errors");
+            if (errors != null && errors.isArray() && errors.size() > 0) {
+                JsonNode desc = errors.get(0).get("description");
+                if (desc != null && !desc.asText().isBlank()) return desc.asText();
+            }
+        } catch (Exception ignore) {
+            // corpo não-JSON: cai no retorno bruto abaixo
+        }
+        return corpo.length() > 220 ? corpo.substring(0, 220) : corpo;
+    }
+
+    private void dorme(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
