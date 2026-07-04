@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class AdminController {
     private final PessoaRepository pessoaRepository;
     private final AssinaturaRepository assinaturaRepository;
+    private final AdminService adminService;
 
     @Value("${admin.token:}")
     private String adminToken;
@@ -121,5 +122,18 @@ public class AdminController {
         assinaturaRepository.salva(a);
         log.info("[admin] Premium MANUAL removido de {}", email);
         return Map.of("ok", true, "email", email, "premium", false);
+    }
+
+    /** APAGA o usuário e TODOS os dados dele (lançamentos, metas, assinatura). Irreversível. */
+    @PostMapping("/usuarios/apagar")
+    public Map<String, Object> apagaUsuario(@RequestHeader(value = "X-Admin-Token", required = false) String token,
+                                            @RequestBody Map<String, String> body) {
+        autoriza(token);
+        String email = body != null ? body.get("email") : null;
+        if (email == null || email.isBlank()) {
+            throw APIException.build(HttpStatus.BAD_REQUEST, "Informe o email.");
+        }
+        adminService.apagaUsuarioCompleto(email);
+        return Map.of("ok", true, "email", email, "apagado", true);
     }
 }
