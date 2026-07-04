@@ -5,6 +5,7 @@ import com.management.finito.meta.application.api.EtapaValorRequest;
 import com.management.finito.meta.application.api.MetaDetalhadaResponse;
 import com.management.finito.meta.application.api.MetaRequest;
 import com.management.finito.meta.application.api.MetaResponse;
+import com.management.finito.assinatura.application.service.PremiumGuard;
 import com.management.finito.meta.application.repository.EtapaRepository;
 import com.management.finito.meta.application.repository.MetasRepository;
 import com.management.finito.meta.domain.Etapa;
@@ -29,6 +30,7 @@ public class MetaApplicationService implements MetaService {
     private final PessoaRepository pessoaRepository;
     private final MetasRepository metaRepository;
     private final EtapaRepository etapaRepository;
+    private final PremiumGuard premiumGuard;
 
     @Override
     public MetaResponse cadastraMeta(MetaRequest metatoRequest) {
@@ -37,6 +39,16 @@ public class MetaApplicationService implements MetaService {
 
         Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Pega o Id do token
         pessoaRepository.buscaPessoaPorId(pessoa.getIdPessoa());
+
+        // Limite do plano grátis: bloqueia criar meta além do teto para quem não é Premium.
+        if (!premiumGuard.isPremium(pessoa.getIdPessoa())) {
+            int qtdMetas = metaRepository.buscaMetas(pessoa.getIdPessoa()).size();
+            if (qtdMetas >= premiumGuard.getLimiteMetas()) {
+                throw APIException.build(HttpStatus.PAYMENT_REQUIRED,
+                        "Você atingiu o limite de " + premiumGuard.getLimiteMetas()
+                                + " metas do plano grátis. Assine o Premium para metas ilimitadas. 👑");
+            }
+        }
 
         Meta metaCriada = new Meta(metatoRequest, pessoa.getIdPessoa());
         Meta metaSalva =  metaRepository.salvaMeta(metaCriada);

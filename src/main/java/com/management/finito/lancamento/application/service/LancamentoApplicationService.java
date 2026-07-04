@@ -1,5 +1,7 @@
 package com.management.finito.lancamento.application.service;
 
+import com.management.finito.assinatura.application.service.PremiumGuard;
+import com.management.finito.handler.APIException;
 import com.management.finito.lancamento.application.api.*;
 import com.management.finito.lancamento.application.repository.LancamentoRepository;
 import com.management.finito.lancamento.domain.IdParcela;
@@ -13,6 +15,7 @@ import com.management.finito.pessoa.domain.Pessoa;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -30,12 +33,23 @@ public class LancamentoApplicationService implements LancamentoService {
     private final PessoaRepository pessoaRepository;
     private final RecorrenciaInfraJPARespository recorrenciaInfraJPARespository;
     private final ParcelaInfraJPARespository parcelaInfraJPARespository;
+    private final PremiumGuard premiumGuard;
 
     @Override
     public LancamentoResponse cadastraLancamento(LancamentoRequest lancamentoRequest, MesDoLancamento mes, int ano) {
         log.info("[start] LancamentoApplicationService - cadastraLancamento");
         Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Pega o Id do token
         pessoaRepository.buscaPessoaPorId(pessoa.getIdPessoa());
+
+        // Limite do plano grátis: bloqueia novos lançamentos no mês além do teto p/ não-Premium.
+        if (!premiumGuard.isPremium(pessoa.getIdPessoa())) {
+            int qtdNoMes = lancamentoRepository.buscaLancamentosPorMesEAno(mes, pessoa.getIdPessoa(), ano).size();
+            if (qtdNoMes >= premiumGuard.getLimiteLancamentosMes()) {
+                throw APIException.build(HttpStatus.PAYMENT_REQUIRED,
+                        "Você atingiu o limite de " + premiumGuard.getLimiteLancamentosMes()
+                                + " lançamentos/mês do plano grátis. Assine o Premium para lançamentos ilimitados. 👑");
+            }
+        }
         Lancamento lancamentoCriado = new Lancamento(lancamentoRequest, pessoa.getIdPessoa(), mes, ano);
 
         Lancamento lancamentoSalvo = null;
