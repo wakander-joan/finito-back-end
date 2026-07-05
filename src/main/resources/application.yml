@@ -36,8 +36,8 @@ asaas:
 
 premium:
   valor: ${PREMIUM_VALOR:9.90}
-  limite-metas: ${PREMIUM_LIMITE_METAS:2}
-  limite-lancamentos-mes: ${PREMIUM_LIMITE_LANCAMENTOS_MES:40}
+  limite-metas: ${PREMIUM_LIMITE_METAS:1}
+  limite-lancamentos-mes: ${PREMIUM_LIMITE_LANCAMENTOS_MES:25}
 
 # Token da Admin API (consumida pelo painel Ordersys Admin, header X-Admin-Token).
 admin:

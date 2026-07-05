@@ -4,6 +4,7 @@ import com.management.finito.lancamento.application.repository.LancamentoReposit
 import com.management.finito.lancamento.domain.Lancamento;
 import com.management.finito.lancamento.domain.enums.CategoriaLancamento;
 import com.management.finito.lancamento.domain.enums.TipoLancamento;
+import com.management.finito.assinatura.application.service.PremiumGuard;
 import com.management.finito.pessoa.application.repository.PessoaRepository;
 import com.management.finito.pessoa.config.EmailService;
 import com.management.finito.pessoa.domain.Pessoa;
@@ -26,6 +27,7 @@ public class NotificacaoVencimentoScheduler {
     private final LancamentoRepository lancamentoRepository;
     private final PessoaRepository pessoaRepository;
     private final EmailService emailService;
+    private final PremiumGuard premiumGuard;
 
     @Scheduled(cron = "0 0 8 * * *", zone = "America/Sao_Paulo") // Todo dia às 08:00 no horário de Brasília
     public void notificarVencimentos() {
@@ -44,6 +46,8 @@ public class NotificacaoVencimentoScheduler {
 
         for (Lancamento lancamento : lancamentos) {
             Pessoa pessoa = pessoaRepository.buscaPessoaPorId(lancamento.getIdPessoa());
+            // Lembrete de vencimento por e-mail é benefício Premium.
+            if (!premiumGuard.isPremium(pessoa.getIdPessoa())) continue;
             boolean receita = lancamento.getTipo() == TipoLancamento.RECEITA.getId();
 
             String assunto = montarAssunto(lancamento, receita, diasRestantes);

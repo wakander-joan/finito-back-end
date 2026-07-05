@@ -17,10 +17,10 @@ import java.util.UUID;
 public class PremiumGuard {
     private final AssinaturaRepository assinaturaRepository;
 
-    @Value("${premium.limite-metas:2}")
+    @Value("${premium.limite-metas:1}")
     private int limiteMetas;
 
-    @Value("${premium.limite-lancamentos-mes:40}")
+    @Value("${premium.limite-lancamentos-mes:25}")
     private int limiteLancamentosMes;
 
     public boolean isPremium(UUID idUsuario) {
