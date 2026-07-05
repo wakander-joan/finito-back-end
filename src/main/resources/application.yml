@@ -39,6 +39,10 @@ premium:
   limite-metas: ${PREMIUM_LIMITE_METAS:1}
   limite-lancamentos-mes: ${PREMIUM_LIMITE_LANCAMENTOS_MES:25}
 
+# Integração cross-app (TaskFlow consome). Header X-Integration-Token == este segredo.
+integracao:
+  token: ${INTEGRACAO_TOKEN:}
+
 # Token da Admin API (consumida pelo painel Ordersys Admin, header X-Admin-Token).
 admin:
   token: ${ADMIN_API_TOKEN:}
