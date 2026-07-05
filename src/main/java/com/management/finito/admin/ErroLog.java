@@ -26,4 +26,11 @@ public class ErroLog {
     private int status;
     @Column(columnDefinition = "text")
     private String mensagem;
+
+    /** E-mail do usuário autenticado que fez a requisição (null se não autenticado). */
+    private String usuarioEmail;
+
+    /** Descrição amigável do que o usuário tentava fazer (ex.: "Criar lançamento"). */
+    @Column(length = 300)
+    private String acao;
 }

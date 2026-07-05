@@ -30,13 +30,15 @@ public class AdminTelemetryService {
     }
 
     @Transactional
-    public void registraErro(String metodo, String path, int status, String mensagem) {
+    public void registraErro(String metodo, String path, int status, String mensagem, String usuarioEmail) {
         try {
             ErroLog e = new ErroLog();
             e.setQuando(Instant.now());
             e.setMetodo(metodo);
             e.setPath(path);
             e.setStatus(status);
+            e.setUsuarioEmail(usuarioEmail);
+            e.setAcao(AcaoDescriber.descreve(metodo, path));
             e.setMensagem(mensagem != null && mensagem.length() > 800 ? mensagem.substring(0, 800) : mensagem);
             erroRepo.save(e);
         } catch (Exception ex) {
